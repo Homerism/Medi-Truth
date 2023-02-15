@@ -5,10 +5,6 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    #creates a relationship field to get the user's queries
-    Queries = db.relationship('query', backref='user', lazy=True, cascade="all, delete-orphan")
-    #creates a relationship field to get the articles the user rated
-    Articles = db.relationship('article', backref='user', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, username, password):
         self.username = username
@@ -27,4 +23,3 @@ class User(db.Model):
     def check_password(self, password):
         """Check hashed password."""
         return check_password_hash(self.password, password)
-
