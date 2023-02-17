@@ -6,21 +6,32 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 from datetime import timedelta
-
-
 from App.database import create_db
+from App.models import User
 
-from App.controllers import (
-    setup_jwt
+login_manager = LoginManager()
+
+from App.views import (
+    user_views,
+    index_views,
+    profile_views,
+    signup_views,
+    login_views
 )
 
-from App.views import views
+# New views must be imported and added to this list
 
+views = [
+    user_views,
+    index_views,
+    profile_views,
+    signup_views,
+    login_views
+]
 
-def add_views(app):
+def add_views(app, views):
     for view in views:
         app.register_blueprint(view)
-
 
 def loadConfig(app, config):
     app.config['ENV'] = os.environ.get('ENV', 'DEVELOPMENT')
@@ -46,13 +57,19 @@ def create_app(config={}):
     loadConfig(app, config)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.config['SEVER_NAME'] = '0.0.0.0'
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.config['UPLOADED_PHOTOS_DEST'] = "App/uploads"
     photos = UploadSet('photos', TEXT + DOCUMENTS + IMAGES)
     configure_uploads(app, photos)
-    add_views(app)
+    add_views(app, views)
+    login_manager.init_app(app)
     create_db(app)
-    setup_jwt(app)
     app.app_context().push()
     return app
+
+@login_manager.user_loader  
+def load_user(user_id):
+    """Check if user is logged-in on every page load."""
+    if user_id is not None:
+        return User.query.get(int(user_id))
+    return None
