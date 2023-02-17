@@ -3,7 +3,7 @@ services:
 - type: web
   name: flask-postgres-api
   env: python
-  repo: https://github.com/JDHomere/qualityassurance.git
+  repo: https://github.com/JDHomere/qualityassurance
   plan: free
   branch: main
   healthCheckPath: /healthcheck
