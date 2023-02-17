@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}Signup Page{% endblock %}
+{% block page %}Signup{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+<style>
+  
+   h1{
+    font-family: "Space Mono", monospace;
+  }
+  
+</style>
+<div class="split-screen">
+  <div class="left">
+    <section class="copy">
+      <p>Already have an account? <a href="/"><strong>Log in</strong></a></p>
+    </section>
+  </div>
+   
+  <div class="row">
+    
+      <div class="card grey"> 
+      <form id="myForm" class="col s12 m8 offset-m2" method="POST" action="/signup">
+          {{ form.csrf_token }}
+         
+          <h4>Sign Up</h4>
+          <div class="input-field col s12 m8 offset-m2">
+            <i class="material-icons prefix">account_circle</i>
+            {{ form.username(size=20, class="validate") }}
+            {{ form.username.label }}
+          </div>
+
+          <div class="input-field col s12 m8 offset-m2">
+            <i class="material-icons prefix">lock</i>
+            {{ form.password(size=20, class="validate") }}
+            {{ form.password.label }}
+          </div>
+
+          <div class="input-field col s12 m8 offset-m2">
+            {{form.submit}}
+          </div> 
+       
+
+      </form>
+      </div> 
+    
+  </div>
+</div>
+  
+</div>  
+{% endblock %}
