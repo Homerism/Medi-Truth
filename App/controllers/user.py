@@ -2,7 +2,6 @@ from App.models import User
 from App.database import db
 import requests
 import json
-from flask import jsonify
 
 def create_user(username, type, password):
     newuser = User(username=username, type=type, password=password)
