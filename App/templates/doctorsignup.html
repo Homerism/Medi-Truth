@@ -13,36 +13,43 @@
   
 </style>
 <div class="split-screen">
+  {% if error %}
+  <nav class="white black-text" style="padding: 10px">
+    <div class="nav-wrapper">
+        <ul class="flashes">
+          <li>{{ error }}</li>
+        </ul>
+    </div>
+  </nav>
+  {% endif %}
   <div class="left">
     <section class="copy">
       <p>Already have an account? <a href="/"><strong>Log in</strong></a></p>
     </section>
   </div>
-   
   <div class="row">
-    
       <div class="card grey"> 
-      <form id="myForm" class="col s12 m8 offset-m2" method="POST" action="/signup">
+      <form id="myForm" class="col s12 m8 offset-m2" method="POST" action="/doctorsignup">
           {{ form.csrf_token }}
-         
           <h4>Sign Up</h4>
           <div class="input-field col s12 m8 offset-m2">
             <i class="material-icons prefix">account_circle</i>
             {{ form.username(size=20, class="validate") }}
             {{ form.username.label }}
           </div>
-
+          <div class="input-field col s12 m8 offset-m2">
+            <i class="material-icons prefix">account_circle</i>
+            {{ form.npi(size=10, class="validate") }}
+            {{ form.npi.label }}
+          </div>
           <div class="input-field col s12 m8 offset-m2">
             <i class="material-icons prefix">lock</i>
             {{ form.password(size=20, class="validate") }}
             {{ form.password.label }}
           </div>
-
           <div class="input-field col s12 m8 offset-m2">
             {{form.submit}}
           </div> 
-       
-
       </form>
       </div> 
     
