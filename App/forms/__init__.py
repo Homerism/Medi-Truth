@@ -1,2 +1,3 @@
 from .login import *
-from .signup import *
+from .usersignup import *
+from .doctorsignup import *

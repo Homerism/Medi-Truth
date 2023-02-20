@@ -1,8 +1,11 @@
 from App.models import User
 from App.database import db
+import requests
+import json
+from flask import jsonify
 
-def create_user(username, password):
-    newuser = User(username=username, password=password)
+def create_user(username, type, password):
+    newuser = User(username=username, type=type, password=password)
     db.session.add(newuser)
     db.session.commit()
     return newuser
@@ -30,4 +33,16 @@ def update_user(id, username):
         db.session.add(user)
         return db.session.commit()
     return None
+
+def get_npi_number(user_input):
+       # make a GET request to the NPI API
+    url = "https://npiregistry.cms.hhs.gov/api/?number="+ user_input + "&version=2.1"
+    response = requests.get(url)
+    data = json.loads(response.text)
+
+    if(data['result_count'] == 1):
+        return True
+    else:
+        return False
+
     
