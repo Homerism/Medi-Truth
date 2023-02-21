@@ -9,7 +9,8 @@ from App.controllers import (
     create_user, 
     get_all_users,
     get_all_users_json,
-    get_npi_number
+    get_npi_number,
+    check_npi
 )
 
 signup_views = Blueprint('signup_views', __name__, template_folder='../templates')
@@ -41,10 +42,16 @@ def DoctorSignupAction():
     form = DoctorSignUp()
     error = ""
     if form.validate:
-       npi = get_npi_number(form.npi.data)
-       if npi is False:
+       real_npi = check_npi(form.npi.data)
+       if not real_npi:
           error = "This is an invalid NPI number"
           return render_template('doctorsignup.html', form=form, error=error)
+       
+       npi = get_npi_number(form.npi.data)
+       if not npi:
+          error = "This is an invalid NPI number"
+          return render_template('doctorsignup.html', form=form, error=error)
+       
        create_user(form.username.data, 'Doctor', form.password.data)
        flash(f"User {form.username.data} created!")
        return redirect(url_for('login_views.loginIndex'))
