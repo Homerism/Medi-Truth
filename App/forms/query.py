@@ -4,4 +4,4 @@ from wtforms.validators import InputRequired
 
 class QueryForm(FlaskForm):
     textarea = TextAreaField('Text', render_kw={"rows": 100, "cols": 100}, validators=[InputRequired()])
-    submit = SubmitField('Login', render_kw={'class': 'btn amber darken-4 waves-effect waves-light'})
+    submit = SubmitField('Submit', render_kw={'class': 'btn amber darken-4 waves-effect waves-light'})
