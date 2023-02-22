@@ -14,7 +14,7 @@ login_manager = LoginManager()
 from App.views import (
     user_views,
     index_views,
-    profile_views,
+    query_views,
     signup_views,
     login_views
 )
@@ -24,7 +24,7 @@ from App.views import (
 views = [
     user_views,
     index_views,
-    profile_views,
+    query_views,
     signup_views,
     login_views
 ]

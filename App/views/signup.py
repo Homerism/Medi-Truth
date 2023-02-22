@@ -25,11 +25,13 @@ def UserSignupIndex():
 @signup_views.route('/usersignup', methods=['POST'])
 def UserSignupAction():
     form = UserSignUp()
+    error = ""
     if form.validate:
        create_user(form.username.data, 'General User', form.password.data)
        flash(f"User {form.username.data} created!")
        return redirect(url_for('login_views.loginIndex'))
-    return "Abort"
+    flash(f"User {form.username.data} was not created successfully!")
+    return render_template('usersignup.html', form=form)
 
 #<----------------------DOCTOR SIGNUP----------------------------------->
 @signup_views.route('/doctorsignup', methods=['GET'])

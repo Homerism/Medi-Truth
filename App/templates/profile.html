@@ -6,5 +6,24 @@
 
 {% block content %}
     
-    <h1> Welcome! </h1>
+<style>
+  
+  h2{
+    font-family: "Space Mono", monospace;
+  }
+</style>
+  <main class="container">
+    <form class="col s12 m8 offset-m2" method="POST" action="/query">
+      {{ form.csrf_token }}
+
+      <div class="input-field col s12 m8 offset-m2">
+        {{ form.textarea(size=20, class="validate") }}
+        {{ form.textarea.label }}
+      </div>
+
+      <div class="input-field col s12 m8 offset-m2">
+        {{form.submit}}
+      </div> 
+    </form>
+  </main> 
 {% endblock %}
