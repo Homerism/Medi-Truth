@@ -7,7 +7,8 @@ from App.models import User
 query_views = Blueprint('query_views', __name__, template_folder='../templates')
 
 from App.controllers import (
-    health_classification
+    health_classification,
+    most_frequent_word
 )
 
 @query_views.route('/query', methods=['GET'])
@@ -23,6 +24,7 @@ def queryAction():
     form = QueryForm()
     if form.validate:
        prediction = health_classification(form.textarea.data)
-       flash(f" {prediction} this is the prediction")
+       word = most_frequent_word(form.textarea.data)
+       flash(f" {prediction} this is the prediction....this is the word {word}")
        return redirect(url_for('query_views.queryAction'))
     return render_template('profile.html', form=form)
