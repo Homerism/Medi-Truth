@@ -23,6 +23,10 @@ def queryAction():
     form = QueryForm()
     if form.validate:
        prediction = health_classification(form.textarea.data)
-       flash(f" {prediction} this is the prediction")
-       return redirect(url_for('query_views.queryAction'))
+       prediction_int = int(prediction)
+       if prediction_int == 1:
+        flash(f" {prediction_int} this claim is most likely credible")
+       else:
+        flash(f" {prediction_int} this claim is most likely NOT credible")
+      
     return render_template('profile.html', form=form)
