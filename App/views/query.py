@@ -7,7 +7,9 @@ from App.models import User, Query
 query_views = Blueprint('query_views', __name__, template_folder='../templates')
 
 from App.controllers import (
-    health_classification
+    health_classification,
+    add_query,
+    get_news_articles
 )
 
 @query_views.route('/query', methods=['GET'])
@@ -34,6 +36,9 @@ def queryAction():
             add_query(curr_user)
             flash(f" {prediction_int} this claim is most likely credible")
        else:
+        verdict = "this claim is most likely NOT credible"
+        curr_user.queries.append(Query(form.textarea.data, verdict))
+        add_query(curr_user)
         flash(f" {prediction_int} this claim is most likely NOT credible")
       
-    return render_template('profile.html', form=form)
+    return render_template('profile.html', form=form, news=news)
