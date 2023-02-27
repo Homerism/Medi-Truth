@@ -10,6 +10,9 @@ def health_classification(news):
   prediction = model.predict(vector_data)
   return prediction
 
+def add_query(user):
+  db.session.add(user)
+  db.session.commit()
 
 #print(prediction)
 #if (prediction == '1'):

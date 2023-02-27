@@ -1,0 +1,36 @@
+{% extends "login-layout.html" %}
+{% block title %}My Queries page{% endblock %}
+{% block page %}HMA{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    
+<style>
+  
+  h2{
+    font-family: "Space Mono", monospace;
+  }
+</style>
+
+  <main class="container">
+    <h2>Claim History</h2>
+
+    {% for query in user.queries %}
+        <ul>
+            <li><b>Claim:</b> {{ query.query_text }}</li>
+            <li><b>Verdict:</b> {{ query.verdict }}</li>
+        </ul>
+
+        <div>
+            <button type="button" onclick="alert('show more details')">More Details</button>
+        </div>
+
+        <div>
+          <button type="button" onclick="alert('delete claim')">Remove Claim</button>
+        </div>
+
+        <hr>
+    {% endfor %}
+  </main> 
+{% endblock %}

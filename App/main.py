@@ -16,7 +16,8 @@ from App.views import (
     index_views,
     query_views,
     signup_views,
-    login_views
+    login_views,
+    queries_views
 )
 
 # New views must be imported and added to this list
@@ -26,7 +27,8 @@ views = [
     index_views,
     query_views,
     signup_views,
-    login_views
+    login_views,
+    queries_views
 ]
 
 def add_views(app, views):
