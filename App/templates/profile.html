@@ -24,5 +24,22 @@
         {{form.submit}}
       </div> 
     </form>
+    
+    {% if not news %}
+    <p>No News Articles to display, please check guidelines for submitting a query.</p>
+    {% else %}
+    <ol>
+    {% for article in news %}
+    <li>
+      <div><b>{{article.title}}</b></div>
+      <div>Source: {{article.source.name}}</div>
+      <div>Description: {{article.description}}</div>
+      <a href="{{article.url}}"> Read More</a>
+    </li>
+  {% endfor %}
+  </ol>
+  {% endif %}
+
+
   </main> 
 {% endblock %}

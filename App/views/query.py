@@ -8,7 +8,7 @@ query_views = Blueprint('query_views', __name__, template_folder='../templates')
 
 from App.controllers import (
     health_classification,
-    most_frequent_word
+    get_news_articles
 )
 
 @query_views.route('/query', methods=['GET'])
@@ -24,7 +24,10 @@ def queryAction():
     form = QueryForm()
     if form.validate:
        prediction = health_classification(form.textarea.data)
-       word = most_frequent_word(form.textarea.data)
-       flash(f" {prediction} this is the prediction....this is the word {word}")
-       return redirect(url_for('query_views.queryAction'))
-    return render_template('profile.html', form=form)
+       news = get_news_articles(form.textarea.data)
+       prediction_int = int(prediction)
+       if prediction_int == 1:
+        flash(f" {prediction_int} this claim is most likely credible")
+       else:
+        flash(f" {prediction_int} this claim is most likely NOT credible")
+    return render_template('profile.html', form=form, news=news)
