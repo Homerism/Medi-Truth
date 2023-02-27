@@ -14,10 +14,3 @@ def add_query(user):
   db.session.add(user)
   db.session.commit()
 
-#print(prediction)
-#if (prediction == '1'):
-  #print("This is Real...")
-#else:
-  #print("False")
-
-
