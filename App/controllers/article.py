@@ -1,6 +1,7 @@
 from nltk.corpus import stopwords
 from collections import Counter
 from App.database import db
+from App.models import Article
 import requests
 import string
 import json
@@ -52,10 +53,15 @@ def get_news_articles(user_input):
     
 
 #function to add user articles to the database
-#def create_article(user_input):
-    #credible_articles = recommend_health_articles(user_input)
-    #for article in credible_articles:
-      #userarticle = Article(title=article["title"], author=article["author"], url=article["url"], content=article["content"], publish=article["publishedAt"], img=article["urlToImage"])
-      #db.session.add(userarticle)
-    #db.session.commit()
-    #return userarticle
+def create_article(article):
+      userarticle = Article(
+                            title=article["title"], 
+                            author=article["author"], 
+                            url=article["url"], 
+                            content=article["content"], 
+                            publish=article["publishedAt"], 
+                            img=article["urlToImage"]
+                           )
+      db.session.add(userarticle)
+      db.session.commit()
+      return
