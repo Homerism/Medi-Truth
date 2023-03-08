@@ -9,7 +9,8 @@ query_views = Blueprint('query_views', __name__, template_folder='../templates')
 from App.controllers import (
     health_classification,
     add_query,
-    get_news_articles
+    get_news_articles,
+    similar_claim
 )
 
 @query_views.route('/query', methods=['GET'])
