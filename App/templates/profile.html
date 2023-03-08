@@ -24,7 +24,6 @@
         {{form.submit}}
       </div> 
     </form>
-    
     {% if not news %}
     <p>No News Articles to display, please check guidelines for submitting a query.</p>
     {% else %}
@@ -40,6 +39,29 @@
   </ol>
   {% endif %}
 
+  <div><hr></div>
 
-  </main> 
+    <h3>Users also searched for</h3>
+  {% if not similar_claims %}
+  <p>No Similar Claims available.</p>
+  {% else %}
+  <ol>
+  {% for claim in similar_claims %}
+  <li>
+    <div><b>{{claim.text}}</b></div>
+    <div>User: {{claim.claimant}}</div>
+
+    {% for claim in claim.claimReview %}
+
+    <div>User: {{claim.publisher.name}}</div>
+    <div>Ratings: {{claim.textualRating}}</div>
+    <a href="{{claim.url}}"> Read More</a>
+
+    {% endfor %}
+
+  </li>
+{% endfor %}
+</ol>
+{% endif %}
+</main> 
 {% endblock %}

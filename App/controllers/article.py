@@ -22,7 +22,7 @@ def most_frequent_words(paragraph):
 
 def get_news_articles(user_input):
    words = most_frequent_words(user_input) #5 most frequent words from the 
-   commonwords = ' OR '.join(words)
+   commonwords = ' + '.join(words)
    credible_sources = ['medgadget.com','news-medical.net','medscape.com','medicalnewstoday.com',
                     'webmd.com','mayoclinic.org','medicalxpress.com','bmj.com','healio.com',
                     'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov','theatlantic.com',
@@ -50,7 +50,20 @@ def get_news_articles(user_input):
    data = json.loads(response.text)
    articles_to_append = data["articles"]
    return articles_to_append[:20]
-    
+
+
+def similar_claim(claim):
+    url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
+    api_key = 'AIzaSyAs2Hwd06hW4Zj8dOym89-aZHv0dQ91SB4' # Set up the API key 
+    params = { #Parameters for the API request
+        'query': claim,
+        'key': api_key,
+        'pageSize': 20,
+    }
+    response = requests.get(url, params=params) #API request and get the response
+    data = json.loads(response.text)  #JSON format
+    similar_claims = data["claims"]
+    return similar_claims[:20]
 
 #function to add user articles to the database
 def create_article(article):
