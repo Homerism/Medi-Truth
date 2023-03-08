@@ -27,6 +27,7 @@ def queryAction():
     if form.validate:
        curr_user_id = current_user.id
        curr_user = User.query.get(curr_user_id)
+       queryInList = False
        
        prediction = health_classification(form.textarea.data)
        news = get_news_articles(form.textarea.data)
@@ -34,13 +35,25 @@ def queryAction():
        similar_claims = similar_claim(form.textarea.data)
        if prediction_int == 1:
             verdict = "this claim is most likely credible"
-            curr_user.queries.append(Query(form.textarea.data, verdict))
-            add_query(curr_user)
+            for eachQuery in curr_user.queries:
+                if (eachQuery.query_text == form.textarea.data):
+                    queryInList = True
+                    break
+            if not queryInList:
+                curr_user.queries.append(Query(form.textarea.data, verdict))
+                add_query(curr_user)
+                queryInList = False
             flash(f" {prediction_int} this claim is most likely credible")
        else:
-        verdict = "this claim is most likely NOT credible"
-        curr_user.queries.append(Query(form.textarea.data, verdict))
-        add_query(curr_user)
-        flash(f" {prediction_int} this claim is most likely NOT credible")
+            verdict = "this claim is most likely NOT credible"
+            for eachQuery in curr_user.queries:
+                if (eachQuery.query_text == form.textarea.data):
+                    queryInList = True
+                    break
+            if not queryInList:
+                curr_user.queries.append(Query(form.textarea.data, verdict))
+                add_query(curr_user)
+                queryInList = False
+            flash(f" {prediction_int} this claim is most likely NOT credible")
       
     return render_template('profile.html', form=form, news=news, similar_claims=similar_claims)
