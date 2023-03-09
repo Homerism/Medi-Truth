@@ -9,8 +9,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(120), nullable=False)
     # relationship for all user's queries
     queries = db.relationship('Query', backref='user', lazy=True, cascade="all, delete-orphan")
-    # relationship for a user's related articles based on claim entered
-    articles = db.relationship('Article', backref='user', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, username, type, password):
         self.username = username

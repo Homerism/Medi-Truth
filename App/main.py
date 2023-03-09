@@ -6,7 +6,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 from datetime import timedelta
-from App.database import init_db
+from App.database import create_db
 from App.models import User
 
 login_manager = LoginManager()
@@ -47,7 +47,7 @@ def create_app(config={}):
     configure_uploads(app, photos)
     add_views(app)
     login_manager.init_app(app)
-    init_db(app)
+    create_db(app)
     app.app_context().push()
     return app
 

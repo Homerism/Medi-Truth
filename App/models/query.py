@@ -7,6 +7,7 @@ class Query(db.Model, UserMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     query_text =  db.Column(db.String, nullable=False)
     verdict =  db.Column(db.String, nullable=False)
+    articles = db.relationship('Article', backref='query', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, query_text, verdict):
       self.query_text = query_text

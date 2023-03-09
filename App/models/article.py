@@ -2,7 +2,7 @@ from App.database import db
 from flask_login import UserMixin
 
 
-class Article(db.Model, UserMixin):
+class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title =  db.Column(db.String, nullable=False)
     author =  db.Column(db.String, nullable=False)
@@ -10,7 +10,7 @@ class Article(db.Model, UserMixin):
     content =  db.Column(db.String, nullable=False)
     publish =  db.Column(db.String, nullable=False)
     img =  db.Column(db.String, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    query_id = db.Column(db.Integer, db.ForeignKey('query.id'), nullable=False)
     
 
     def __init__(self, title, author, url, content, publish, img):
@@ -29,5 +29,6 @@ class Article(db.Model, UserMixin):
             'url': self.url,
             'content': self.content,
             'publish': self.publish,
-            'img': self.img
-        }  
+            'img': self.img,
+        } 
+     
