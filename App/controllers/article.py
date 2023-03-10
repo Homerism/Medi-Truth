@@ -68,6 +68,12 @@ def similar_claim(claim):
 #function to add user articles to the database
 def create_article(articles, query_id):
     for article in articles:
-        userarticle = Article(title=article["title"],author=article["author"],url=article["url"],content=article["content"], publish=article["publishedAt"], img=article["urlToImage"], query_id=query_id)
+        userarticle = Article(title=article["title"],
+                              author=article["author"],
+                              url=article["url"],
+                              content=article["content"],
+                              publish=article["publishedAt"],
+                              img=article["urlToImage"], 
+                              query_id=query_id)
         db.session.add(userarticle)
         db.session.commit()
