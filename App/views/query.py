@@ -59,6 +59,6 @@ def queryAction():
                 add_query(curr_user)
                 create_article(news,query.id)
                 queryInList = False
-            flash(f" {prediction_int} this claim is most likely NOT credible")
+            flash(f" {prediction_int} this claim is most likely NOT credible")    
       
     return render_template('profile.html', form=form, news=news, similar_claims=similar_claims)

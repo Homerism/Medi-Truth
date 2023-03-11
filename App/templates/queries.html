@@ -22,9 +22,10 @@
             <li><b>Verdict:</b> {{ query.verdict }}</li>
         </ul>
 
-        <div>
-            <button type="button" onclick="alert('show more details')">More Details</button>
-        </div>
+        <form action="/details" method="post">
+            <input type="hidden" name="details" value="{{query.id}}">
+            <button type="submit">More Details</button>
+        </form>
 
         <div>
           <button type="button" onclick="alert('delete claim')">Remove Claim</button>
