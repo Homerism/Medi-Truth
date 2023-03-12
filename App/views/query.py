@@ -13,8 +13,7 @@ from App.controllers import (
     similar_claim,
     create_article,
     generate_response,
-    call_until_return,
-    query_search
+    call_until_return
 )
 
 @query_views.route('/query', methods=['GET'])
