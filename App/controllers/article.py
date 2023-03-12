@@ -22,7 +22,7 @@ def most_frequent_words(paragraph):
 
 def get_news_articles(user_input):
    words = most_frequent_words(user_input) #5 most frequent words from the 
-   commonwords = ' + '.join(words)
+   commonwords = ' OR '.join(words)
    credible_sources = ['medgadget.com','news-medical.net','medscape.com','medicalnewstoday.com',
                     'webmd.com','mayoclinic.org','medicalxpress.com','bmj.com','healio.com',
                     'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov','theatlantic.com',
@@ -39,6 +39,7 @@ def get_news_articles(user_input):
                     'womenshealthmag.com','womenshealth.gov'] #Top 50 credible news websites
    
    sources = ','.join(credible_sources)
+   
    params = { # News API request URL with the most common word
        "apiKey": newsapi_key,
        "q": commonwords,
@@ -46,9 +47,24 @@ def get_news_articles(user_input):
        "sortBy": "relevancy",
        "domains": sources
    }
+   
    response = requests.get(base_url, params=params) #Json request
    data = json.loads(response.text)
-   articles_to_append = data["articles"]
+   
+   if not data:
+        return []
+   else:
+       articles = data['articles']
+       articles_to_append = []
+    
+       for article in articles:# Get the article content and check if it contains any of the words in the list
+           content = article['content']
+           title = article['title']
+           description = article['description']
+           if any(word in content for word in commonwords):
+               if any(word in title for word in commonwords):
+                   if any(word in description for word in commonwords):  # If the article contains one of the words, append it to the list to be saved
+                       articles_to_append.append(article)
    return articles_to_append[:20]
 
 
@@ -62,8 +78,13 @@ def similar_claim(claim):
     }
     response = requests.get(url, params=params) #API request and get the response
     data = json.loads(response.text)  #JSON format
-    similar_claims = data["claims"]
-    return similar_claims[:20]
+    
+    if not data:
+        return []
+    else:
+        similar_claims = data["claims"]
+        return similar_claims[:20]
+        
 
 #function to add user articles to the database
 def create_article(articles, query_id):

@@ -1,14 +1,10 @@
-from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, flash, url_for
-from flask_login import login_user, login_required, current_user 
+from flask import Blueprint, redirect, render_template, flash, url_for
 from App.database import db
 from App.forms.usersignup import UserSignUp
 from App.forms.doctorsignup import DoctorSignUp
-from App.models import User
 
 from App.controllers import (
     create_user, 
-    get_all_users,
-    get_all_users_json,
     get_npi_number,
     check_npi
 )

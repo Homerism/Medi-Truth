@@ -15,11 +15,12 @@
 
   <main class="container">
     <h2>Claim History</h2>
-
+    
     {% for query in user.queries %}
         <ul>
             <li><b>Claim:</b> {{ query.query_text }}</li>
             <li><b>Verdict:</b> {{ query.verdict }}</li>
+            <li><b>Response:</b> {{ query.response }}</li>
         </ul>
 
         <form action="/details" method="post">
