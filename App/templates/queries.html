@@ -28,9 +28,10 @@
             <button type="submit">More Details</button>
         </form>
 
-        <div>
-          <button type="button" onclick="alert('delete claim')">Remove Claim</button>
-        </div>
+        <form action="/remove" method="post">
+          <input type="hidden" name="removal" value="{{query.id}}">
+          <button type="submit">Remove Query</button>
+      </form>
 
         <hr>
     {% endfor %}

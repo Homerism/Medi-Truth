@@ -22,7 +22,7 @@ def most_frequent_words(paragraph):
 
 def get_news_articles(user_input):
    words = most_frequent_words(user_input) #5 most frequent words from the 
-   commonwords = ' OR '.join(words)
+   commonwords = '+'.join(words)
    credible_sources = ['medgadget.com','news-medical.net','medscape.com','medicalnewstoday.com',
                     'webmd.com','mayoclinic.org','medicalxpress.com','bmj.com','healio.com',
                     'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov','theatlantic.com',

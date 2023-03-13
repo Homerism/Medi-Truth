@@ -17,7 +17,7 @@ def add_query(user):
   db.session.add(user)
   db.session.commit()
 
-openai.api_key = "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"
+openai.api_key = "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"
 def generate_response(health_claim): # Function to generate a response to a health claim
     
     model_engine = "text-davinci-002"
@@ -40,3 +40,15 @@ def call_until_return(func,text):
     while not result:
         result = func(text)
     return result
+
+def remove_query(id):
+  obj = Query.query.filter_by(id=id).one()
+  db.session.delete(obj)
+  db.session.commit()
+
+def create_query(text, response, verdict):
+    newquery = Query(query_text=text, response=response, verdict=verdict)
+    return newquery
+
+def get_query(id):
+    return Query.query.get(id)
