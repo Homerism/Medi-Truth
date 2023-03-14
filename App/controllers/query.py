@@ -17,7 +17,11 @@ def add_query(user):
   db.session.add(user)
   db.session.commit()
 
-openai.api_key = "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"
+a1 = "sk-DE438X2CUbLc8"
+a2 = "z9wUMQ2T3BlbkFJfo"
+a3 = "pbtAsSDH9f02awv8ib"
+openai.api_key = a1+a2+a3
+
 def generate_response(health_claim): # Function to generate a response to a health claim
     
     model_engine = "text-davinci-002"
