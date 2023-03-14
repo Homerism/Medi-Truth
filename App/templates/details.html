@@ -1,0 +1,25 @@
+{% extends "login-layout.html" %}
+{% block title %}Health Misinformation{% endblock %}
+{% block page %}HMA{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+
+    <h2>Query Details</h2>
+
+    {% for each in details.articles %}
+        <div>
+            <ul>
+                <li><img src="{{ each.img }}" alt="no image" width="200" height="200"></li>
+                <li><b style="font-size:25px"> {{ each.title }} </b></li>
+                <li> {{ each.content }} </li>
+                <li style="font-size:13px"><b >Author(s):</b> {{ each.author }} </li>
+                <li style="font-size:13px"><b >publish date: </b> {{ each.publish }} </li>
+                <li><a href="{{ each.url }}">visit page</a></li>
+                <hr>
+            </ul>
+        </div>
+    {% endfor %}
+    
+{% endblock %}

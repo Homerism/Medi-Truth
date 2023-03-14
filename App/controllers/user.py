@@ -44,4 +44,21 @@ def get_npi_number(user_input):
     else:
         return False
 
-    
+def check_npi (num_string):
+    result=False
+    npi_length=len(num_string)
+
+    if npi_length<10 or npi_length>10:
+        result = True
+    else:    
+        for each in num_string:
+            try:
+                int(each)
+            except:
+                result=True
+                break
+
+    if result:
+        return False
+    else:
+        return True

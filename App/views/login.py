@@ -19,8 +19,8 @@ def loginAction():
     user = User.query.filter_by(username=form.username.data).first()
     if user and user.check_password(form.password.data):
       login_user(user)
-      flash(f"User {form.username.data} has logged in successfully!")
-      return redirect(url_for('profile_views.index_page'))
+      flash(f"User {form.username.data} was logged in successfully!")
+      return redirect(url_for('query_views.index_page'))
     error = "Incorrect Password Input"
     return render_template('login.html', form=form, error=error)
 

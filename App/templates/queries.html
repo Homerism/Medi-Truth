@@ -1,0 +1,39 @@
+{% extends "login-layout.html" %}
+{% block title %}My Queries page{% endblock %}
+{% block page %}HMA{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    
+<style>
+  
+  h2{
+    font-family: "Space Mono", monospace;
+  }
+</style>
+
+  <main class="container">
+    <h2>Claim History</h2>
+    
+    {% for query in user.queries %}
+        <ul>
+            <li><b>Claim:</b> {{ query.query_text }}</li>
+            <li><b>Verdict:</b> {{ query.verdict }}</li>
+            <li><b>Response:</b> {{ query.response }}</li>
+        </ul>
+
+        <form action="/details" method="post">
+            <input type="hidden" name="details" value="{{query.id}}">
+            <button type="submit">More Details</button>
+        </form>
+
+        <form action="/remove" method="post">
+          <input type="hidden" name="removal" value="{{query.id}}">
+          <button type="submit">Remove Query</button>
+      </form>
+
+        <hr>
+    {% endfor %}
+  </main> 
+{% endblock %}

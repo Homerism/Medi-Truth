@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block title %}Health Misinformation{% endblock %}
+{% block page %}HMA{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    
+<style>
+  
+    h2{
+      font-family: "Space Mono", monospace;
+    }
+  </style>
+    <main class="container">
+      <form class="col s12 m8 offset-m2" method="POST" action="/checkclaim">
+        {{ form.csrf_token }}
+  
+        <div class="input-field col s12 m8 offset-m2">
+          {{ form.textarea(size=20, class="validate") }}
+          {{ form.textarea.label }}
+        </div>
+        <div class="input-field col s12 m8 offset-m2">
+          {{form.submit}}
+        </div> 
+      </form>
+      {% if not news %}
+      <p>No News Articles to display, please check guidelines for submitting a query.</p>
+      {% else %}
+      <ol>
+      {% for article in news %}
+      <li>
+        <div><b>{{article.title}}</b></div>
+        <div>Source: {{article.source.name}}</div>
+        <div>Description: {{article.description}}</div>
+        <a href="{{article.url}}"> Read More</a>
+      </li>
+    {% endfor %}
+    </ol>
+    {% endif %}
+  
+    <div><hr></div>
+  
+      <h3>Users also searched for</h3>
+    {% if not similar_claims %}
+    <p>No Similar Claims available.</p>
+    {% else %}
+    <ol>
+    {% for claim in similar_claims %}
+    <li>
+      <div><b>{{claim.text}}</b></div>
+      <div>User: {{claim.claimant}}</div>
+  
+      {% for claim in claim.claimReview %}
+  
+      <div>User: {{claim.publisher.name}}</div>
+      <div>Ratings: {{claim.textualRating}}</div>
+      <a href="{{claim.url}}"> Read More</a>
+  
+      {% endfor %}
+  
+    </li>
+  {% endfor %}
+  </ol>
+  {% endif %}
+  </main> 
+    
+{% endblock %}

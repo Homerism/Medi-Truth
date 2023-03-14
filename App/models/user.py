@@ -7,6 +7,8 @@ class User(db.Model, UserMixin):
     username =  db.Column(db.String, nullable=False)
     type = db.Column(db.String, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    # relationship for all user's queries
+    queries = db.relationship('Query', backref='user', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, username, type, password):
         self.username = username

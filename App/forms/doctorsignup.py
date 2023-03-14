@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, StringField, PasswordField, IntegerField, validators
-from wtforms.validators import InputRequired, Length
-from wtforms.widgets import html5 as h5widgets
+from wtforms.validators import InputRequired #Length
+#from wtforms.widgets import html5 as h5widgets
 
 class DoctorSignUp(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])

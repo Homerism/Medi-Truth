@@ -11,25 +11,9 @@ from App.models import User
 
 login_manager = LoginManager()
 
-from App.views import (
-    user_views,
-    index_views,
-    profile_views,
-    signup_views,
-    login_views
-)
+from App.views import views
 
-# New views must be imported and added to this list
-
-views = [
-    user_views,
-    index_views,
-    profile_views,
-    signup_views,
-    login_views
-]
-
-def add_views(app, views):
+def add_views(app):
     for view in views:
         app.register_blueprint(view)
 
@@ -61,7 +45,7 @@ def create_app(config={}):
     app.config['UPLOADED_PHOTOS_DEST'] = "App/uploads"
     photos = UploadSet('photos', TEXT + DOCUMENTS + IMAGES)
     configure_uploads(app, photos)
-    add_views(app, views)
+    add_views(app)
     login_manager.init_app(app)
     create_db(app)
     app.app_context().push()
