@@ -1,7 +1,7 @@
 from nltk.corpus import stopwords
 from collections import Counter
 from App.database import db
-from App.models import Article
+from App.models import Article, ArticleRate
 import requests
 import string
 import json
@@ -105,3 +105,24 @@ def create_article(articles, query_id): #function to add user articles to the da
                               query_id=query_id)
         db.session.add(userarticle)
         db.session.commit()
+
+def create_article_for_doctors(articles, stored_articles): #adding articles(no repeats) for the doctor feed
+    check = False
+    
+    for article in articles:
+        for each in stored_articles:
+            if each.title == article["title"]:
+                check = True
+                break
+        
+        if(not check):    
+            userarticle = ArticleRate(title=article["title"],
+                                author=article["author"],
+                                url=article["url"],
+                                content=article["content"],
+                                publish=article["publishedAt"],
+                                img=article["urlToImage"])
+            db.session.add(userarticle)
+            db.session.commit() 
+        else:
+            check = False           

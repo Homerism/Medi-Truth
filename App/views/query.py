@@ -2,7 +2,7 @@ from flask import Blueprint,render_template, request, flash
 from flask_login import login_required, current_user 
 from App.database import db
 from App.forms.query import QueryForm
-from App.models import Query
+from App.models import Query, ArticleRate
 
 query_views = Blueprint('query_views', __name__, template_folder='../templates')
 
@@ -17,7 +17,8 @@ from App.controllers import (
     remove_query,
     get_user,
     get_query,
-    create_query
+    create_query,
+    create_article_for_doctors
 )
 
 @query_views.route('/query', methods=['GET'])
@@ -37,6 +38,12 @@ def queryAction():
        prediction = health_classification(form.textarea.data)
        response = call_until_return(generate_response,form.textarea.data)
        news = get_news_articles(form.textarea.data)
+       
+       #for doctor feed
+       storedArticles = ArticleRate.query.all()
+       create_article_for_doctors(news,storedArticles)
+       #end doctor feed
+
        prediction_int = int(prediction)
        similar_claims = similar_claim(form.textarea.data)
        if prediction_int == 1:
