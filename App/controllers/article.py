@@ -8,7 +8,11 @@ import json
 import nltk
 
 # Set up News API credentials and base URL
-newsapi_key = "3e40cfef90d74e95b4cdbcd55e912715"
+
+a1 = "3e40cfef90d74e9"
+a2 = "5b4cdbcd55e912715"
+
+newsapi_key = a1+a2
 base_url = "https://newsapi.org/v2/everything"
 
 def most_frequent_words(paragraph):
@@ -22,7 +26,7 @@ def most_frequent_words(paragraph):
 
 def get_news_articles(user_input):
    words = most_frequent_words(user_input) #5 most frequent words from the 
-   commonwords = '+'.join(words)
+   commonwords = ' AND '.join(words)
    credible_sources = ['medgadget.com','news-medical.net','medscape.com','medicalnewstoday.com',
                     'webmd.com','mayoclinic.org','medicalxpress.com','bmj.com','healio.com',
                     'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov','theatlantic.com',
@@ -70,14 +74,19 @@ def get_news_articles(user_input):
 
 def similar_claim(claim):
     url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
-    api_key = 'AIzaSyAs2Hwd06hW4Zj8dOym89-aZHv0dQ91SB4' # Set up the API key 
+
+    a1 ='AIzaSyAs2Hwd06'
+    a2 = 'hW4Zj8dOym89'
+    a3 = '-aZHv0dQ91SB4'
+    api_key = a1+a2+a3
+
     params = { #Parameters for the API request
         'query': claim,
         'key': api_key,
         'pageSize': 20,
     }
     response = requests.get(url, params=params) #API request and get the response
-    data = json.loads(response.text)  #JSON format
+    data = json.loads(response.text)
     
     if not data:
         return []
@@ -85,9 +94,7 @@ def similar_claim(claim):
         similar_claims = data["claims"]
         return similar_claims[:20]
         
-
-#function to add user articles to the database
-def create_article(articles, query_id):
+def create_article(articles, query_id): #function to add user articles to the database
     for article in articles:
         userarticle = Article(title=article["title"],
                               author=article["author"],

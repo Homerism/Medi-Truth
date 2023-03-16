@@ -17,7 +17,7 @@ def add_query(user):
   db.session.add(user)
   db.session.commit()
 
-openai.api_key = "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"
+openai.api_key = "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"
 def generate_response(health_claim): # Function to generate a response to a health claim
     
     model_engine = "text-davinci-002"
@@ -32,7 +32,7 @@ def generate_response(health_claim): # Function to generate a response to a heal
         max_tokens=max_tokens,
         stop=stop
     )
-    generated_text = response.choices[0].text.strip() # Extracting the generated response from the API response
+    generated_text = response.choices[0].text.strip()
     return generated_text
 
 def call_until_return(func,text):
