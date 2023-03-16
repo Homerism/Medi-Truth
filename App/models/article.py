@@ -12,7 +12,6 @@ class Article(db.Model):
     img =  db.Column(db.String, nullable=True)
     query_id = db.Column(db.Integer, db.ForeignKey('query.id'), nullable=False)
     
-
     def __init__(self, title, author, url, content, publish, img, query_id):
       self.title = title
       self.author = author
