@@ -7,7 +7,6 @@ from App.controllers import (
     get_ai_response,
     start_conversation,
     call_until_return_response
-    
 )
 
 @chatbot_views.route("/chatbot", methods=["GET", "POST"])
