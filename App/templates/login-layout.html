@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
   <head>
-  
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
      <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -18,18 +17,16 @@
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="left">
                 <li><a href="/query">Home</a></li>
+                <li><a href="/chatbot">Chatbot</a></li>
                 <li><a href="/queries">My Queries</a></li>
-                
                 {% if current_user.type == 'Doctor' %}
                 <li><a href="/feed">Feed</a></li>
                 {% endif %}
-
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </div>
       </div>
     </nav>
-    
     {% with messages = get_flashed_messages() %}
       {% if messages %}
       <nav class="white black-text" style="padding: 10px">
@@ -43,7 +40,6 @@
       </nav>
       {% endif %}
     {% endwith %}
-
     <div class="container" id="content">{% block content %}{% endblock %}</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   </body>
