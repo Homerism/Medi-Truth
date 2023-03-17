@@ -19,6 +19,13 @@ def approvalScore(title):
      return finalScore
 
 def create_reaction(user_id, react, article_id):
+    allReactions = DoctorReaction.query.all()
+    for eachReaction in allReactions:
+        if ((eachReaction.user_id==user_id) and (eachReaction.article_id==article_id)):
+            eachReaction.react = react
+            db.session.commit()
+            return
+
     newuser = DoctorReaction(user_id=user_id, react=react, article_id=article_id)
     db.session.add(newuser)
     db.session.commit()
