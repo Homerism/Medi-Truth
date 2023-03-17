@@ -35,8 +35,10 @@
       <div>Description: {{article.description}}</div>
       <a href="{{article.url}}"> Read More</a>
     </li>
+    {% set title = str(article.title) %}
+    {% set id = get_article_id(title) %}
 
-    <div><b>This article was approved by {{ calculate_rating(get_article_id(article.title)) }} doctors</b></div>
+    <div><b>Article Approval Rating by certified Medical Practtioners: {{ calculate_rating(id) }} %</b></div>
 
   {% endfor %}
   </ol>

@@ -74,7 +74,7 @@ def queryAction():
                 create_article(news,query.id)
                 queryInList = False
             flash(f" {prediction_int} {verdict} {response}")    
-    return render_template('profile.html', form=form, news=news, similar_claims=similar_claims, get_article_id=get_article_id, calculate_rating=calculate_rating)
+    return render_template('profile.html', form=form, news=news, similar_claims=similar_claims, get_article_id=get_article_id, calculate_rating=calculate_rating,str=str,int=int)
 
 @query_views.route('/queries', methods=['GET'])
 @login_required
@@ -98,4 +98,4 @@ def queries_page_remove():
 def details_page():
     queryId = request.form['details']
     curr_query = Query.query.get(queryId)
-    return render_template('details.html', details=curr_query)
+    return render_template('details.html', details=curr_query,get_article_id=get_article_id, calculate_rating=calculate_rating,str=str)

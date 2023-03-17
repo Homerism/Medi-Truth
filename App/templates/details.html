@@ -17,6 +17,11 @@
                 <li style="font-size:13px"><b >Author(s):</b> {{ each.author }} </li>
                 <li style="font-size:13px"><b >publish date: </b> {{ each.publish }} </li>
                 <li><a href="{{ each.url }}">visit page</a></li>
+                {% set title = str(each.title) %}
+                {% set id = get_article_id(title) %}
+            
+                <div><b>Article Approval Rating by certified Medical Practtioners: {{ calculate_rating(id) }} %</b></div>
+            
                 <hr>
             </ul>
         </div>
