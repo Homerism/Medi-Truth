@@ -6,7 +6,12 @@
 
 {% block content %}
     
-<h1>Doctor Feed In Progress.....</h1>
+<h1>Doctor Feed</h1>
+
+<form action="/feed" method="post">
+    <input type="text" name="keyword" placeholder="article keywords">
+    <input type="submit" value="Search Articles">
+</form>
 
 {% for eachArticle in articles %}
     <p>{{ eachArticle.title }}</p>

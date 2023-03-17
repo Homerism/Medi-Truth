@@ -1,11 +1,12 @@
-from flask import Blueprint,render_template, flash
+from flask import Blueprint,render_template, flash, request
 from flask_login import login_required, current_user 
 from App.database import db
 from App.models import ArticleRate
 feed_views = Blueprint('feed_views', __name__, template_folder='../templates')
 
 from App.controllers import (
-    create_reaction
+    create_reaction,
+    article_search
 )
 
 @feed_views.route('/feed', methods=['GET'])
@@ -15,6 +16,7 @@ def index_page():
     return render_template('doctorFeed.html', articles=doctorArticles)
 
 @feed_views.route('/like/<int:article_id>')
+@login_required
 def like(article_id):
     doctorArticles = ArticleRate.query.all()
     curr_user_id = current_user.id
@@ -22,26 +24,28 @@ def like(article_id):
     return render_template('doctorFeed.html', articles=doctorArticles)
 
 @feed_views.route('/dislike/<int:article_id>')
+@login_required
 def dislike(article_id):
     doctorArticles = ArticleRate.query.all()
     curr_user_id = current_user.id
     create_reaction(curr_user_id, "Disapprove", article_id)
     return render_template('doctorFeed.html', articles=doctorArticles)
 
-#@feed_views.route('/search', methods=['POST'])
-#def search_product():
-  #doctorArticles = ArticleRate.query.all()
-  #queryresults = str(request.form["searcharticle"]) #requests search term
-  #results = article_search(queryresults) #Searches for product in database
-  #count=0
+@feed_views.route('/feed', methods=['POST'])
+@login_required
+def search_product():
+  doctorArticles = ArticleRate.query.all()
+  queryresults = str(request.form["keyword"]) #requests search term
+  results = article_search(queryresults) #Searches for articles in database
+  count=0
   #Checking the amount of items in results (Returns item not found if count = 0)
-  #for article in results:
-    #count+=1
-  #if queryresults is None or queryresults =="": 
-    #flash("Please enter an article keyword")
-    #return render_template('doctorFeed.html', articles=doctorArticles)
-  #if count == 0: 
-    #flash("Sorry No articles was found.")
-    #return render_template('doctorFeed.html', articles=doctorArticles)
-  #else:
-    #return render_template('doctorFeed.html', articles=doctorArticles, results=results)
+  for article in results:
+    count+=1
+  if queryresults is None or queryresults =="": 
+    flash("Please enter an article keyword")
+    return render_template('doctorFeed.html', articles=doctorArticles)
+  if count == 0: 
+    flash("Sorry No articles was found.")
+    return render_template('doctorFeed.html', articles=doctorArticles)
+  else:
+    return render_template('doctorFeed.html', articles=results)
