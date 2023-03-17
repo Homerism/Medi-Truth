@@ -126,3 +126,4 @@ def create_article_for_doctors(articles, stored_articles): #adding articles(no r
             db.session.commit() 
         else:
             check = False           
+
