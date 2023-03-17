@@ -35,6 +35,9 @@
       <div>Description: {{article.description}}</div>
       <a href="{{article.url}}"> Read More</a>
     </li>
+
+    <div><b>This article was approved by {{ calculate_rating(get_article_id(article.title)) }} doctors</b></div>
+
   {% endfor %}
   </ol>
   {% endif %}

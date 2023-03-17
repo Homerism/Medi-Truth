@@ -18,7 +18,9 @@ from App.controllers import (
     get_user,
     get_query,
     create_query,
-    create_article_for_doctors
+    create_article_for_doctors,
+    calculate_rating,
+    get_article_id
 )
 
 @query_views.route('/query', methods=['GET'])
@@ -72,7 +74,7 @@ def queryAction():
                 create_article(news,query.id)
                 queryInList = False
             flash(f" {prediction_int} {verdict} {response}")    
-    return render_template('profile.html', form=form, news=news, similar_claims=similar_claims)
+    return render_template('profile.html', form=form, news=news, similar_claims=similar_claims, get_article_id=get_article_id, calculate_rating=calculate_rating)
 
 @query_views.route('/queries', methods=['GET'])
 @login_required
