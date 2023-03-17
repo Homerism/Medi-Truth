@@ -1,5 +1,4 @@
 from App.database import db
-from flask_login import UserMixin
 
 class ArticleRate(db.Model):
     id = db.Column(db.Integer, primary_key=True)

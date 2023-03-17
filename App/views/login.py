@@ -27,5 +27,6 @@ def loginAction():
 @login_views.route('/logout', methods=['GET'])
 @login_required
 def logout():
+  flash(f"Goodbye...you was logged out.")
   logout_user()
   return redirect(url_for('index_views.index'))

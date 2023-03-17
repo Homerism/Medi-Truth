@@ -71,7 +71,6 @@ def get_news_articles(user_input):
                        articles_to_append.append(article)
    return articles_to_append[:20]
 
-
 def similar_claim(claim):
     url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
 
