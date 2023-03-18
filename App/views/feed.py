@@ -1,7 +1,7 @@
 from flask import Blueprint,render_template, flash, request
 from flask_login import login_required, current_user 
 from App.database import db
-from App.models import ArticleRate
+from App.models import ArticleRate, DoctorReaction
 feed_views = Blueprint('feed_views', __name__, template_folder='../templates')
 
 from App.controllers import (
@@ -14,6 +14,22 @@ from App.controllers import (
 def index_page():
     doctorArticles = ArticleRate.query.all()
     return render_template('doctorFeed.html', articles=doctorArticles)
+
+@feed_views.route('/rankedfeed', methods=['GET'])
+@login_required
+def ranked_queries_page():
+    curr_user_id = current_user.id
+    rankedArticles = DoctorReaction.query.filter_by(user_id=curr_user_id)
+    doctorArticles = ArticleRate.query.all()
+    doctorArticleList = []
+
+    for eachArticle in rankedArticles:
+       for eachDoctorArticle in doctorArticles:
+          if(eachArticle.article_id == eachDoctorArticle.id):
+            doctorArticleList.append(eachDoctorArticle)
+
+    return render_template('doctorFeed.html', articles=doctorArticleList)    
+    
 
 @feed_views.route('/like/<int:article_id>')
 @login_required

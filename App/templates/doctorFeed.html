@@ -13,6 +13,8 @@
     <input type="submit" value="Search Articles">
 </form>
 
+<a href="rankedfeed">View all ranked articles</a>
+
 {% for eachArticle in articles %}
     <p>{{ eachArticle.title }}</p>
     <a href='{{eachArticle.url}}'>Read More</a>
