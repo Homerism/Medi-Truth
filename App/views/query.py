@@ -16,7 +16,6 @@ from App.controllers import (
     call_until_return,
     remove_query,
     get_user,
-    get_query,
     create_query,
     create_article_for_doctors,
     calculate_rating,
@@ -40,12 +39,10 @@ def queryAction():
        prediction = health_classification(form.textarea.data)
        response = call_until_return(generate_response,form.textarea.data)
        news = get_news_articles(form.textarea.data)
-       
        #for doctor feed
        storedArticles = ArticleRate.query.all()
        create_article_for_doctors(news,storedArticles)
        #end doctor feed
-
        prediction_int = int(prediction)
        similar_claims = similar_claim(form.textarea.data)
        if prediction_int == 1:
@@ -82,6 +79,21 @@ def queries_page():
     curr_user_id = current_user.id
     curr_user = get_user(curr_user_id)
     return render_template('queries.html', user=curr_user)
+
+@query_views.route('/filter/<int:id>')
+@login_required
+def filter(id):
+    curr_user_id = current_user.id
+    curr_user = get_user(curr_user_id)
+    verdict =""
+    if id == 1:
+        verdict = "this claim is most likely credible"
+    else:
+        verdict = "this claim is most likely NOT credible"
+    results = Query.query.filter_by(user_id=curr_user_id, verdict=verdict).all()
+    if not results:
+        flash(f"None Found.")
+    return render_template('queries.html', user=curr_user, results=results)
 
 @query_views.route('/remove', methods=['POST'])
 @login_required
