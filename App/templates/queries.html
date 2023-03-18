@@ -1,28 +1,22 @@
 {% extends "login-layout.html" %}
 {% block title %}My Queries page{% endblock %}
 {% block page %}HMA{% endblock %}
-
 {{ super() }}
-
 {% block content %}
-
 <style>
-  
   h2{
     font-family: "Space Mono", monospace;
   }
 </style>
-
   <main class="container">
     <h2>Claim History</h2>
 <!------Filter Starts Here----------->
     {% if user.queries or results %}
-    <a href="/filter/{{1}}">Credible</a>   <a href="/filter/{{0}}">Untrustworthy</a></p>
+    <p>Filter by: <a href="/filter/{{1}}">Credible</a>   <a href="/filter/{{0}}">Untrustworthy</a></p>
   {% else %}
   <div></div>
   {% endif %}
 <!------Filter Ends Here----------->
-
     {% if not results %}
     {% for query in user.queries %}
         <ul>
@@ -39,23 +33,19 @@
           <input type="hidden" name="removal" value="{{query.id}}">
           <button type="submit">Remove Query</button>
       </form>
-
         <hr>
     {% endfor %}
     {% else %}
     {% for result in results %}
-
     <ul>
       <li><b>Claim:</b> {{ result.query_text }}</li>
       <li><b>Verdict:</b> {{ result.verdict }}</li>
       <li><b>Response:</b> {{ result.response }}</li>
   </ul>
-
   <form action="/details" method="post">
       <input type="hidden" name="details" value="{{result.id}}">
       <button type="submit">More Details</button>
   </form>
-
   <form action="/remove" method="post">
     <input type="hidden" name="removal" value="{{result.id}}">
     <button type="submit">Remove Query</button>
@@ -63,6 +53,5 @@
 <hr>
     {% endfor %}
   {% endif %}
-
   </main> 
 {% endblock %}

@@ -1,11 +1,8 @@
 {% extends "login-layout.html" %}
 {% block title %}Chat Bot{% endblock %}
 {% block page %}HMA{% endblock %}
-
 {{ super() }}
-
 {% block content %}
-    
 <h1>Health Chatbot</h1>
 <form method="POST" action="/chatbot">
     <input type="hidden" name="conversation_id" value="{{ conversation_id }}">
@@ -18,5 +15,4 @@
 <form method="POST" action="/end_conversation">
     <button type="submit">End Conversation</button>
 </form>
-    
 {% endblock %}
