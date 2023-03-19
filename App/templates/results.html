@@ -7,8 +7,8 @@
 {% if not conditions %}
 
 <h1>Symptom Checker</h1>
-<form action="/symptoms" method="post">
-    <label for="symptoms">Please enter your symptoms (separated by commas):</label><br>
+<form action="/symptoms" method="POST">
+    <label for="symptoms">Please enter your symptoms (separated by commas) e.g fever,headache,back pain:</label><br>
     <input type="text" id="symptoms" name="symptoms"><br>
     <input type="submit" value="Submit">
 </form>
@@ -21,6 +21,7 @@
             {% for condition in conditions %}
                 <li>{{ condition }}</li>
             {% endfor %}
+            <li><a href="/symptoms">Check Symptom Again</a></li>
         </ul>
     {% else %}
         <p>Sorry, we could not find any possible conditions for your symptoms.</p>

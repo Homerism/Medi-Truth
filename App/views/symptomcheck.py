@@ -9,7 +9,6 @@ def index():
 
 @symptom_views.route('/symptoms', methods=['POST'])
 def get_symptom_diagnosis():
-    
     symptom_to_condition = {
         "fever": ["flu", "COVID-19", "pneumonia",'Influenza', 'Pneumonia', 'Malaria'],
         "cough": ["common cold", "bronchitis", "COVID-19",'Pneumonia', 'Asthma'],
@@ -60,18 +59,18 @@ def get_symptom_diagnosis():
         "high blood pressure": ["Hypertension", "Atherosclerosis", "Heart attack", "Stroke"]
 }
     
-    symptoms = request.form.get("symptoms")
-    symptoms = input().strip().lower().split(",")
+    symptoms = str(request.form["symptoms"])
+    symptoms = symptoms.replace(", ",",")
+    symptoms = symptoms.strip().lower().split(",")
     potential_conditions = []
-
+    
     for symptom in symptoms:
-        if symptom in symptom_to_condition:
-            potential_conditions += symptom_to_condition[symptom]
+         if symptom in symptom_to_condition:
+              potential_conditions += symptom_to_condition[symptom]
 
     potential_conditions = list(set(potential_conditions))
-
+    
     if potential_conditions:
-        flash("Based on your symptoms, you may have one of the following conditions:")
         return render_template('results.html',conditions=potential_conditions)
     else:
         flash("Sorry, we could not find any potential conditions based on your symptoms.")
