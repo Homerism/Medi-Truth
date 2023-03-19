@@ -4,10 +4,12 @@ from flask_login import login_required
 symptom_views = Blueprint('symptom_views', __name__, template_folder='../templates')
 
 @symptom_views.route('/symptoms', methods=['GET'])
+@login_required
 def index():
     return render_template('results.html')
 
 @symptom_views.route('/symptoms', methods=['POST'])
+@login_required
 def get_symptom_diagnosis():
     symptom_to_condition = {
         "fever": ["flu", "COVID-19", "pneumonia",'Influenza', 'Pneumonia', 'Malaria'],
