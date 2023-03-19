@@ -4,8 +4,8 @@ import pickle
 import openai
 import os
 
-vector = pickle.load(open("App/controllers/dection-vector.pkl",'rb')) 
-model = pickle.load(open("App/controllers/dection-model.pkl", 'rb')) 
+vector = pickle.load(open("App/controllers/detection-vector.pkl",'rb')) 
+model = pickle.load(open("App/controllers/detection-model.pkl", 'rb')) 
 
 def health_classification(news):
   input_data = [news]
