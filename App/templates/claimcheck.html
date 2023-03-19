@@ -1,13 +1,9 @@
 {% extends "layout.html" %}
 {% block title %}Health Misinformation{% endblock %}
 {% block page %}HMA{% endblock %}
-
 {{ super() }}
-
 {% block content %}
-    
 <style>
-  
     h2{
       font-family: "Space Mono", monospace;
     }
@@ -15,7 +11,6 @@
     <main class="container">
       <form class="col s12 m8 offset-m2" method="POST" action="/checkclaim">
         {{ form.csrf_token }}
-  
         <div class="input-field col s12 m8 offset-m2">
           {{ form.textarea(size=20, class="validate") }}
           {{ form.textarea.label }}
@@ -38,9 +33,7 @@
     {% endfor %}
     </ol>
     {% endif %}
-  
     <div><hr></div>
-  
       <h3>Users also searched for</h3>
     {% if not similar_claims %}
     <p>No Similar Claims available.</p>
@@ -50,19 +43,14 @@
     <li>
       <div><b>{{claim.text}}</b></div>
       <div>User: {{claim.claimant}}</div>
-  
       {% for claim in claim.claimReview %}
-  
       <div>User: {{claim.publisher.name}}</div>
       <div>Ratings: {{claim.textualRating}}</div>
       <a href="{{claim.url}}"> Read More</a>
-  
       {% endfor %}
-  
     </li>
   {% endfor %}
   </ol>
   {% endif %}
-  </main> 
-    
+  </main>   
 {% endblock %}

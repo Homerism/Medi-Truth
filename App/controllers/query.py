@@ -32,7 +32,7 @@ def generate_response(health_claim): # Function to generate a response to a heal
         max_tokens=max_tokens,
         stop=stop
     )
-    generated_text = response.choices[0].text.strip() # Extracting the generated response from the API response
+    generated_text = response.choices[0].text.strip()
     return generated_text
 
 def call_until_return(func,text):

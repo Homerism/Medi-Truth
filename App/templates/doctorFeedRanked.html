@@ -1,0 +1,43 @@
+{% extends "login-layout.html" %}
+{% block title %}feed page{% endblock %}
+{% block page %}HMA{% endblock %}
+{{ super() }}
+{% block content %}
+<h1>Ranked Articles</h1>
+{% if articles or results %}
+<p>Filter by: <a href="/rankedfeed/{{1}}">Approved</a>   <a href="/rankedfeed/{{0}}">Disapproved</a></p>
+{% else %}
+<div></div>
+{% endif %}
+{% if not results %}
+{% for eachArticle in articles %}
+<div>
+    <ul>
+        <li><img src="{{ eachArticle.img }}" alt="no image" width="200" height="200"></li>
+        <li><b style="font-size:25px"> {{ eachArticle.title }} </b></li>
+        <li> {{ eachArticle.content }} </li>
+        <li style="font-size:13px"><b >Author(s):</b> {{ eachArticle.author }} </li>
+        <li style="font-size:13px"><b >publish date: </b> {{ eachArticle.publish }} </li>
+        <li><a href="{{ eachArticle.url }}">Read More</a></li>
+        <a href="/rankedfeed/approved/{{ eachArticle.id }}">Approve</a><a href="/rankedfeed/disapproved/{{ eachArticle.id }}">Disapprove</a>
+        <hr>
+    </ul>
+</div>
+{% endfor %}
+{% else %}
+{% for eachArticle in results %}
+<div>
+    <ul>
+        <li><img src="{{ eachArticle.img }}" alt="no image" width="200" height="200"></li>
+        <li><b style="font-size:25px"> {{ eachArticle.title }} </b></li>
+        <li> {{ eachArticle.content }} </li>
+        <li style="font-size:13px"><b >Author(s):</b> {{ eachArticle.author }} </li>
+        <li style="font-size:13px"><b >publish date: </b> {{ eachArticle.publish }} </li>
+        <li><a href="{{ eachArticle.url }}">Read More</a></li>
+        <a href="/rankedfeed/approved/{{ eachArticle.id }}">Approve</a><a href="/rankedfeed/disapproved/{{ eachArticle.id }}">Disapprove</a>
+        <hr>
+    </ul>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

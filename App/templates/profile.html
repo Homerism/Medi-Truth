@@ -1,13 +1,9 @@
 {% extends "login-layout.html" %}
 {% block title %}profile page{% endblock %}
 {% block page %}HMA{% endblock %}
-
 {{ super() }}
-
 {% block content %}
-    
 <style>
-  
   h2{
     font-family: "Space Mono", monospace;
   }
@@ -15,7 +11,6 @@
   <main class="container">
     <form class="col s12 m8 offset-m2" method="POST" action="/query">
       {{ form.csrf_token }}
-
       <div class="input-field col s12 m8 offset-m2">
         {{ form.textarea(size=20, class="validate") }}
         {{ form.textarea.label }}
@@ -35,12 +30,13 @@
       <div>Description: {{article.description}}</div>
       <a href="{{article.url}}"> Read More</a>
     </li>
+    {% set title = str(article.title) %}
+    {% set id = get_article_id(title) %}
+    <div><b>Article Approval Rating by certified Medical Practtioners: {{ calculate_rating(id) }} %</b></div>
   {% endfor %}
   </ol>
   {% endif %}
-
   <div><hr></div>
-
     <h3>Users also searched for</h3>
   {% if not similar_claims %}
   <p>No Similar Claims available.</p>
@@ -50,15 +46,11 @@
   <li>
     <div><b>{{claim.text}}</b></div>
     <div>User: {{claim.claimant}}</div>
-
     {% for claim in claim.claimReview %}
-
     <div>User: {{claim.publisher.name}}</div>
     <div>Ratings: {{claim.textualRating}}</div>
     <a href="{{claim.url}}"> Read More</a>
-
     {% endfor %}
-
   </li>
 {% endfor %}
 </ol>

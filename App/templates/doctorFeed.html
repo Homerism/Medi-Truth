@@ -1,0 +1,26 @@
+{% extends "login-layout.html" %}
+{% block title %}feed page{% endblock %}
+{% block page %}HMA{% endblock %}
+{{ super() }}
+{% block content %}
+<h1>Doctor Feed</h1>
+<form action="/feed" method="post">
+    <input type="text" name="keyword" placeholder="article keywords">
+    <input type="submit" value="Search Articles">
+</form>
+<p>View Ranked Articles: <a href="/rankedfeed">View all ranked articles</a></p>
+{% for eachArticle in articles %}
+<div>
+    <ul>
+        <li><img src="{{ eachArticle.img }}" alt="no image" width="200" height="200"></li>
+        <li><b style="font-size:25px"> {{ eachArticle.title }} </b></li>
+        <li> {{ eachArticle.content }} </li>
+        <li style="font-size:13px"><b >Author(s):</b> {{ eachArticle.author }} </li>
+        <li style="font-size:13px"><b >publish date: </b> {{ eachArticle.publish }} </li>
+        <li><a href="{{ eachArticle.url }}">Read More</a></li>
+        <li><a href="/like/{{ eachArticle.id }}">Approve</a><a href="/dislike/{{ eachArticle.id }}">Disapprove</a></li>
+        <hr>
+    </ul>
+</div>
+{% endfor %}
+{% endblock %}
