@@ -39,10 +39,10 @@ def checkclaimAction():
         similar_claims = similar_claim(form.textarea.data)
         if prediction_int == 1:
             verdict = "this claim is most likely credible"
-            flash(f"  {verdict} {response}")
-            flash(f"  {verdict} {response}")
+            flash(f"  {verdict}")
+            flash(f"  {response}")
         else:
             verdict = "this claim is most likely NOT credible"
-            flash(f"  {verdict} {response}")
-            flash(f"  {verdict} {response}")
+            flash(f"  {verdict}")
+            flash(f"  {response}")
     return render_template('claimcheck.html', form=form, news=news, similar_claims=similar_claims)

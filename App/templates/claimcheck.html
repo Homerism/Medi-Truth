@@ -1,22 +1,6 @@
 {% extends "layout.html" %} {% block title %}Health Misinformation{% endblock %}
 {% block page %}HMA{% endblock %} {{ super() }} {% block content %}
-<style>
-  .v-sheet {
-    ::v=deep #flashes {
-      background-color: red;
-      background: red; !important
-    }
-  }
-
-  ::v-deep .v-list {
-    background-color: red;
-    background: red; !important
-  }
-
-  .v-list v-theme--light v-list--density-default v-list--one-line error{
-    background: blue;
-  }
-</style>
+<style></style>
 <v-sheet class="cointaner" color="transparent" class="mt-5">
   {% with messages = get_flashed_messages(with_categories=true) %} {% if
   messages %}
