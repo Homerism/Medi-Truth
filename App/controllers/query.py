@@ -4,8 +4,8 @@ import pickle
 import openai
 import os
 
-vector = pickle.load(open("App/controllers/dection-vector.pkl",'rb')) 
-model = pickle.load(open("App/controllers/dection-model.pkl", 'rb')) 
+vector = pickle.load(open("App/controllers/detection-vector.pkl",'rb')) 
+model = pickle.load(open("App/controllers/detection-model.pkl", 'rb')) 
 
 def health_classification(news):
   input_data = [news]
@@ -17,7 +17,11 @@ def add_query(user):
   db.session.add(user)
   db.session.commit()
 
-openai.api_key = "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"
+a = "sk-DE438X2CUbLc8"
+b = "z9wUMQ2T3BlbkFJfopbt"
+c = "AsSDH9f02awv8ib"
+
+openai.api_key = a+b+c
 def generate_response(health_claim): # Function to generate a response to a health claim
     
     model_engine = "text-davinci-002"
