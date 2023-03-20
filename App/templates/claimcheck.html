@@ -42,11 +42,7 @@
   {% endif %} {% endwith %}
 
   <!-- If no article was submitted Display -->
-  {% if not news %}
-  <p>
-    No News Articles to display, please check guidelines for submitting a query.
-  </p>
-  {% else %}
+  {% if not news %} {% else %}
   <!-- Display Articles if claim was submitted-->
   {% for article in news %}
   <v-card
@@ -64,40 +60,35 @@
   >
   {% endfor %} {% endif %}
   <!--Display no similar claims-->
-  <v-sheet class="text-left justify-left" color="transparent">
-    <h3>Users also searched for</h3>
-    {% if not similar_claims %}
-    <p>No Similar Claims available.</p>
-    {% else %}
-    <!-- Display Similar claims-->
-    <ol>
-      {% for claim in similar_claims %}
-      <li>
-        <div><b>{{claim.text}}</b></div>
-        <div>User: {{claim.claimant}}</div>
-        {% for claim in claim.claimReview %}
-        <div>User: {{claim.publisher.name}}</div>
-        <div>Ratings: {{claim.textualRating}}</div>
-        <a href="{{claim.url}}"> Read More</a>
-        {% endfor %}
-      </li>
-      {% endfor %}
-    </ol>
-    {% endif %}
+  {% if not similar_claims %} {% else %}
+  <!-- Display Similar claims-->
+  <h3>Users also searched for</h3>
+  {% for claim in similar_claims %}
+  <v-sheet color="transparent" class="text-left">
+    <div class="text=h6">{{claim.text}}</div>
+    <div>{{claim.claimant}}</div>
   </v-sheet>
+  {% for claim in claim.claimReview %}
+  <v-card
+    class="text-left my-5"
+    flat
+    variant="tonal"
+    width="block"
+    title="{{claim.publisher.name}}"
+    subtitle="{{claim.textualRating}}"
+  >
+    <v-card-actions>
+      <v-btn variant="text" href="{{claim.url}}"> Learn More </v-btn>
+    </v-card-actions></v-card
+  >
+  {% endfor %} {% endfor %} {% endif %}
 
   <!-- FORM -->
   <form class="col s12 m8 offset-m2" method="POST" action="/checkclaim">
     {{ form.csrf_token }}
     <!-- Text Field -->
     <div class="input-field col s12 m8 offset-m2">
-      <v-text-field
-        type="input"
-        variant="outlined"
-        class="validate"
-        placeholder="Query"
-        density="compact"
-      ></v-text-field>
+      {{ form.textarea(size=20, class="validate") }} {{ form.textarea.label }}
     </div>
     <div class="input-field col s12 m8 offset-m2">{{form.submit}}</div>
   </form>
