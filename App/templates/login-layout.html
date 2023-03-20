@@ -1,46 +1,102 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-     <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <!--Import Google Icon Font-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!-- vuetify -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <!-- Layout styling -->
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+      body {
+        font-family: "Lato", sans-serif;
+      }
+    </style>
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
-    <nav class="purple">
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
-        <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left">
-                <li><a href="/query">Home</a></li>
-                <li><a href="/chatbot">Chatbot</a></li>
-                <li><a href="/queries">My Queries</a></li>
-                {% if current_user.type == 'Doctor' %}
-                <li><a href="/feed">Feed</a></li>
-                {% endif %}
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </div>
-      </div>
-    </nav>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <nav class="white black-text" style="padding: 10px">
-        <div class="nav-wrapper">
-            <ul class="flashes">
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-      </nav>
-      {% endif %}
-    {% endwith %}
-    <div class="container" id="content">{% block content %}{% endblock %}</div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <div id="app"></div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.1.10/dist/vuetify.min.js"></script>
+    <script type="text/x-template" id="app-template">
+                  <v-app>
+             <v-layout>
+      <!-- Navigation -->
+                    <v-navigation-drawer color="#191A1D">
+              <!-- List Rendering  -->
+                      <v-list density="compact" nav>
+                        <v-list-item
+                                v-for="nav in navs"
+                                :href="nav.link"
+                                style="color: white"
+                              >
+                            <template v-slot:prepend>
+                            <v-icon :icon="nav.icon"> </v-icon>
+                          </template>
+                           <v-list-item-title class="text-subtitle-2 font-weight-medium" v-text="nav.title"></v-list-item-title>
+                            </v-list-item>
+                            {% if current_user.type == 'Doctor'%}
+                            <v-list-item prepend-icon="mdi-plus" href="/feed"> Feed
+                            </v-list-item>
+                            {% endif %}
+
+                      </v-list>
+                    </v-navigation-drawer>
+      <!-- Main Content, Right of Navigation Drawer -->
+                    <v-main style="background-color: #191A1D; color: white">
+                      <div class="container d-flex justify-center flex-coloumn text-center" id="content">{% block content %}{% endblock %}</div>
+                    </v-main>
+                  </v-layout>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js">
+    </script>
   </body>
+  <script>
+    const { createApp } = Vue;
+    const { createVuetify } = Vuetify;
+
+    const vuetify = createVuetify();
+
+    const app = createApp({
+      template: "#app-template",
+
+      data() {
+        return {
+          message: "Hello Vue!",
+          navs: [
+            { title: "Home", icon: "mdi-home", link: "/query" },
+            { title: "ChatBot", icon: "mdi-plus", link: "/chatbot" },
+            { title: "My Queries", icon: "mdi-paperclip", link: "/queries" },
+            {
+              title: "Logout",
+              icon: "mdi-clipboard-outline",
+              link: "/symptoms",
+            },
+          ],
+        };
+      },
+    })
+      .use(vuetify)
+      .mount("#app");
+  </script>
 </html>

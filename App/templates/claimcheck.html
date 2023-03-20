@@ -1,56 +1,105 @@
-{% extends "layout.html" %}
-{% block title %}Health Misinformation{% endblock %}
-{% block page %}HMA{% endblock %}
-{{ super() }}
-{% block content %}
+{% extends "layout.html" %} {% block title %}Health Misinformation{% endblock %}
+{% block page %}HMA{% endblock %} {{ super() }} {% block content %}
 <style>
-    h2{
-      font-family: "Space Mono", monospace;
+  .v-sheet {
+    ::v=deep #flashes {
+      background-color: red;
+      background: red; !important
     }
-  </style>
-    <main class="container">
-      <form class="col s12 m8 offset-m2" method="POST" action="/checkclaim">
-        {{ form.csrf_token }}
-        <div class="input-field col s12 m8 offset-m2">
-          {{ form.textarea(size=20, class="validate") }}
-          {{ form.textarea.label }}
-        </div>
-        <div class="input-field col s12 m8 offset-m2">
-          {{form.submit}}
-        </div> 
-      </form>
-      {% if not news %}
-      <p>No News Articles to display, please check guidelines for submitting a query.</p>
-      {% else %}
-      <ol>
-      {% for article in news %}
-      <li>
-        <div><b>{{article.title}}</b></div>
-        <div>Source: {{article.source.name}}</div>
-        <div>Description: {{article.description}}</div>
-        <a href="{{article.url}}"> Read More</a>
-      </li>
+  }
+
+  ::v-deep .v-list {
+    background-color: red;
+    background: red; !important
+  }
+
+  .v-list v-theme--light v-list--density-default v-list--one-line error{
+    background: blue;
+  }
+</style>
+<v-sheet class="cointaner" color="transparent" class="mt-5">
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %}
+  <v-sheet class="text-left justify-left" color="transparent">
+    {% for category, message in messages %}
+    <v-list id="flashes" color="red" style="background: none">
+      <v-list-item
+        v-if="{{loop.index}} == 1"
+        class="text-h3"
+        style="color: white"
+        >{{ message }}</v-list-item
+      >
+      <v-list-item
+        v-if="{{loop.index}} == 2"
+        color="white"
+        style="color: #b6b6b6"
+        class="text-h6"
+        >{{ message }}</v-list-item
+      >
+    </v-list>
     {% endfor %}
-    </ol>
-    {% endif %}
-    <div><hr></div>
-      <h3>Users also searched for</h3>
+  </v-sheet>
+  {% endif %} {% endwith %}
+
+  <!-- If no article was submitted Display -->
+  {% if not news %}
+  <p>
+    No News Articles to display, please check guidelines for submitting a query.
+  </p>
+  {% else %}
+  <!-- Display Articles if claim was submitted-->
+  {% for article in news %}
+  <v-card
+    class="text-left my-5"
+    variant="tonal"
+    flat
+    width="block"
+    title="{{article.title}}"
+    subtitle="{{article.source.name}}"
+    text="{{article.description}}"
+  >
+    <v-card-actions>
+      <v-btn variant="text" href="{{article.url}}"> Learn More </v-btn>
+    </v-card-actions></v-card
+  >
+  {% endfor %} {% endif %}
+  <!--Display no similar claims-->
+  <v-sheet class="text-left justify-left" color="transparent">
+    <h3>Users also searched for</h3>
     {% if not similar_claims %}
     <p>No Similar Claims available.</p>
     {% else %}
+    <!-- Display Similar claims-->
     <ol>
-    {% for claim in similar_claims %}
-    <li>
-      <div><b>{{claim.text}}</b></div>
-      <div>User: {{claim.claimant}}</div>
-      {% for claim in claim.claimReview %}
-      <div>User: {{claim.publisher.name}}</div>
-      <div>Ratings: {{claim.textualRating}}</div>
-      <a href="{{claim.url}}"> Read More</a>
+      {% for claim in similar_claims %}
+      <li>
+        <div><b>{{claim.text}}</b></div>
+        <div>User: {{claim.claimant}}</div>
+        {% for claim in claim.claimReview %}
+        <div>User: {{claim.publisher.name}}</div>
+        <div>Ratings: {{claim.textualRating}}</div>
+        <a href="{{claim.url}}"> Read More</a>
+        {% endfor %}
+      </li>
       {% endfor %}
-    </li>
-  {% endfor %}
-  </ol>
-  {% endif %}
-  </main>   
+    </ol>
+    {% endif %}
+  </v-sheet>
+
+  <!-- FORM -->
+  <form class="col s12 m8 offset-m2" method="POST" action="/checkclaim">
+    {{ form.csrf_token }}
+    <!-- Text Field -->
+    <div class="input-field col s12 m8 offset-m2">
+      <v-text-field
+        type="input"
+        variant="outlined"
+        class="validate"
+        placeholder="Query"
+        density="compact"
+      ></v-text-field>
+    </div>
+    <div class="input-field col s12 m8 offset-m2">{{form.submit}}</div>
+  </form>
+</v-sheet>
 {% endblock %}

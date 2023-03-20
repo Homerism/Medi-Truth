@@ -1,11 +1,38 @@
-{% extends "layout.html" %}
-{% block title %}Health Misinformation{% endblock %}
-{% block page %}HMA{% endblock %}
+{% extends "layout.html" %} {% block title %}Health Misinformation{% endblock %}
+{% block page %}HMA{% endblock %} {{ super() }} {% block content %}
 
-{{ super() }}
+<v-sheet class="cointaner" color="transparent" class="mt-5">
+  <!-- Medi Truth logo-->
+  <v-img
+    class="mx-auto"
+    height="120px"
+    width="250px"
+    contain
+    aspect-ratio="16/9"
+    src="http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s"
+  ></v-img>
+  <!-- Info Section-->
+  <p class="text-h4">Make your claim, we'll rebuttle.</p>
+  <p class="mt-5">
+    We process your statements, recommend articles <br />
+    and keep tabs for your convenience. Never get lost in the sea of information
+    again with us
+  </p>
+  <!-- Info Section guides-->
+  <v-sheet class="d-flex flex-row mt-15" color="transparent">
+    <template v-for="guide in guides">
+      <v-card
+        flat
+        height="300"
+        width="300"
+        class="mx-4"
+        :title="guide.title"
+        :subtitle="guide.subtitle"
+        color="transparent"
+      >
+      </v-card>
+    </template>
+  </v-sheet>
+</v-sheet>
 
-{% block content %}
-    
-    <h5><b>Health Misinformation App</b></h5>
-    
 {% endblock %}

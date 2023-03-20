@@ -1,49 +1,116 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-  
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-     <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <!--Import Google Icon Font-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!-- vuetify -->
+    <link
+    href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+    rel="stylesheet"
+    />
+  <link
+    href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css"
+    rel="stylesheet"
+    />
+    <!-- Layout styling -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+      body{
+        font-family: 'Lato', sans-serif;
+      }
+      </style>
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %}</title>
-
   </head>
   <body>
-    <nav class="purple">
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
-        <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left">
-                <li><a href="/">Home</a></li>
-                <li><a href="/checkclaim">Check Claim</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/symptoms">Check Symptom</a></li>
-                <li><a href="/usersignup">Signup</a></li>
-                <li><a href="/login">Login</a></li>
-            </ul>
-        </div>
-      </div>
-    </nav>
-    
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <nav class="white black-text" style="padding: 10px">
-        <div class="nav-wrapper">
-            <ul class="flashes">
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-      </nav>
-      {% endif %}
-    {% endwith %}
+              <div id="app"></div>
+              <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/vuetify@3.1.10/dist/vuetify.min.js"></script>
+              <script type="text/x-template" id="app-template">
+                <v-app>
+                  <v-layout>
+      <!-- Navigation -->              
+                    <v-navigation-drawer color="#191A1D">
+              <!-- List Rendering  -->
+                      <v-list density="compact" nav>
+                        <v-list-item
+                                v-for="nav in navs"
+                                :href="nav.link"
+                                style="color: white"
+                              >
+                            <template v-slot:prepend>
+                            <v-icon :icon="nav.icon"> </v-icon>
+                          </template>
+                           <v-list-item-title class="text-subtitle-2 font-weight-medium" v-text="nav.title"></v-list-item-title>
+                            </v-list-item>
+                      </v-list>
 
-    <div class="container" id="content">{% block content %}{% endblock %}</div>
+                      <template v-slot:append>
+                        <div class="pa-2">
+                          <v-btn block variant="tonal">
+                            Light Mode
+                          </v-btn>
+                        </div>
+                      </template>
+                    </v-navigation-drawer>  
+              <!-- Main Content, Right of Navigation Drawer -->
+                    <v-main style="background-color: #191A1D; color: white">
+                      <div class="container d-flex justify-center flex-coloumn text-center" id="content">{% block content %}{% endblock %}</div>
+                    </v-main>
+                  </v-layout>
+
+<!-- Notify User of something-->
+   
+ 
+      </v-app>
+    </script>
+      </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="e2e/require.js"></script>
+    
   </body>
+  <script>
+    const { createApp } = Vue;
+    const { createVuetify } = Vuetify;
+    
+    const vuetify = createVuetify();
+    
+    const app = createApp({
+      template: "#app-template", 
+
+      data() {
+        return {
+          message: 'Hello Vue!',
+          navs: ([{title: 'Home', icon: 'mdi-home', link: '/'},
+                  {title: 'Check Claim', icon: 'mdi-plus', link: '/checkclaim'},
+                  {title: 'About Us', icon: 'mdi-paperclip', link: '/about'},
+                  {title: 'Check Symptom', icon: 'mdi-clipboard-outline', link: '/symptoms'},
+                  {title: 'Signup', icon: 'mdi-account-outline', link: '/usersignup'},
+                  {title: 'Login', icon: 'mdi-folder', link: '/login'},]),
+
+          guides: ([{title: 'Submit a Query', subtitle:'Click on new claim and hit enter', icon: '' },
+          {title: 'Symptom Checker', subtitle: 'Check what illness has these symptoms', icon: '' },
+          {title: 'Recents', subtitle: 'Log in and keep tabs on your searches', icon: '' }
+          ])
+                }
+      }
+
+    })
+      .use(vuetify)
+      .mount("#app");
+  </script>
 </html>
