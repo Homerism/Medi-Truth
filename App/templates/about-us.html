@@ -1,6 +1,34 @@
 {% extends "layout.html" %} {% block title %}About-us{% endblock %} {% block
 page %}HMA{% endblock %} {{ super() }} {% block content %}
 
-<p class="text-h3 mt-5">About us</p>
+<!--Title-->
+<v-sheet class="cointaner" color="transparent" class="mt-15">
+  <p class="text-h4" style="color: grey">About us:</p>
+  <!-- Info Section-->
+  <p class="text-h4">Meet the Team.</p>
+  <p class="mt-5">
+    We process your statements, recommend articles <br />
+    and keep tabs for your convenience. Never get lost in the sea of information
+    again with us
+  </p>
 
+  <v-sheet class="d-flex mt-15 justify-center" color="transparent">
+    <template v-for="member in members">
+      <v-card
+        color="transparent"
+        width="350px"
+        height="380px"
+        class="mx-10"
+        :title="member.name"
+        :subtitle="member.role"
+        :text="member.text"
+      >
+        <v-avatar color="surface-variant" size="180" class="mt-5">
+          <v-img :src="member.image" alt="John" cover></v-img>
+        </v-avatar>
+      </v-card>
+    </template>
+  </v-sheet>
+  <!--Profile Cards-->
+</v-sheet>
 {% endblock %}
