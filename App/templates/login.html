@@ -1,48 +1,42 @@
-{% extends "layout.html" %}
-{% block title %}login page{% endblock %}
-{% block page %}Login{% endblock %}
-
-{{ super() }}
-
-{% block content %}
+{% extends "layout.html" %} {% block title %}login page{% endblock %} {% block
+page %}Login{% endblock %} {{ super() }} {% block content %}
 <style>
-  
-  h2{
+  h2 {
     font-family: "Space Mono", monospace;
   }
 </style>
-{% if error %}
-<nav class="white black-text" style="padding: 10px">
-  <div class="nav-wrapper">
+<v-sheet class="cointaner" color="transparent" class="mt-15">
+  {% if error %}
+  <nav class="white black-text" style="padding: 10px">
+    <div class="nav-wrapper">
       <ul class="flashes">
         <li>{{ error }}</li>
       </ul>
-  </div>
-</nav>
-{% endif %}
+    </div>
+  </nav>
+  {% endif %}
   <section class="container">
-      <h2>Login</h2>
-      <p>No account as yet? <a href="/usersignup"><strong>Signup</strong></a></p>
+    <h2>Login</h2>
+    <p>
+      No account as yet? <a href="/usersignup"><strong>Signup</strong></a>
+    </p>
   </section>
   <main class="container">
     <form class="col s12 m8 offset-m2" method="POST" action="/login">
       {{ form.csrf_token }}
 
       <div class="input-field col s12 m8 offset-m2">
-        <i class="material-icons prefix">account_circle</i> 
-        {{ form.username(size=20, class="validate") }}
-        {{ form.username.label }}
+        <i class="material-icons prefix">account_circle</i>
+        {{ form.username(size=20, class="validate") }} {{ form.username.label }}
       </div>
 
       <div class="input-field col s12 m8 offset-m2">
         <i class="material-icons prefix">lock</i>
-        {{ form.password(size=20, class="validate") }}
-        {{ form.password.label }}
+        {{ form.password(size=20, class="validate") }} {{ form.password.label }}
       </div>
 
-      <div class="input-field col s12 m8 offset-m2">
-        {{form.submit}}
-      </div> 
+      <div class="input-field col s12 m8 offset-m2">{{form.submit}}</div>
     </form>
-  </main> 
-  {% endblock %}
+  </main>
+</v-sheet>
+{% endblock %}
