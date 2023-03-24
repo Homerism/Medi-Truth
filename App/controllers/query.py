@@ -1,11 +1,12 @@
 from App.database import db
 from App.models import Query
-import pickle
 import openai
-import os
 
-model = pickle.load(open("App/controllers/detection-model.pkl", 'rb')) 
-vector = pickle.load(open("App/controllers/detection-vector.pkl",'rb')) 
+from App.controllers.algorithm import (
+   algorithm
+)
+
+model,vector = algorithm()
 
 def health_classification(news):
   input_data = [news]
