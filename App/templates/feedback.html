@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Contribution</title>
+    </head>
+    <body>
+<form method="post" action="/feedback">
+    <label for="statement">Please enter a Health/Medical Claim:</label><br>
+    <input type="text" id="statement" name="statement" required><br>
+    <label for="description">Description:</label><br>
+    <input type="text" id="description" name="description" required><br>
+    <label for="rating">Rating:</label><br>
+    <input type="radio" id="rating-true" name="rating" value="1" required>
+    <label for="rating-true">True</label>
+    <input type="radio" id="rating-false" name="rating" value="0" required>
+    <label for="rating-false">False</label><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+<p>{{ error }}</p>
+</body>
+</html>

@@ -14,7 +14,9 @@ from nltk.corpus import stopwords
 import pandas as pd
 import string
 import nltk
+import csv
 import re
+
 
 # Define word optimization function to clean text data
 def clean_text(text):
@@ -74,4 +76,12 @@ def algorithm():
     model_score = accuracy_score(x_prediction, y_train)
 
     return model, vector
+
+def data_in_csv_check(statement):
+    with open('App/controllers/claims.csv', 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[2].strip() == statement:
+                return True
+        return False
 
