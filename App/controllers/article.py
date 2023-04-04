@@ -26,21 +26,28 @@ def most_frequent_words(paragraph):
 
 def get_news_articles(user_input):
    words = most_frequent_words(user_input) #5 most frequent words from the 
-   commonwords = ' AND '.join(words)
+   commonwords = ' OR '.join(words)
+   #'bbc.com','cnn.com','nytimes.com','theatlantic.com','npr.org','forbes.com','time.com',
    credible_sources = ['medgadget.com','news-medical.net','medscape.com','medicalnewstoday.com',
                     'webmd.com','mayoclinic.org','medicalxpress.com','bmj.com','healio.com',
-                    'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov','theatlantic.com',
-                    'bbc.com','cnn.com','discovermagazine.com','forbes.com','knowablemagazine.org',
+                    'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov',
+                    'discovermagazine.com','knowablemagazine.org',
                     'livescience.com','mdedge.com','medicaldaily.com','medpagetoday.com'
-                    'newscientist.com','nytimes.com','npr.org','quantamagazine.org','reuters.com',
-                    'scientificamerican.com','statnews.com','time.com','beckershospitalreview.com',
+                    'newscientist.com','quantamagazine.org','reuters.com',
+                    'scientificamerican.com','statnews.com','beckershospitalreview.com',
                     'fiercehealthcare.com','hcplive.com','healthaffairs.org','healthitoutcomes.com',
                     'healthcaredive.com','mmm-online.com','modernhealthcare.com','pharmacytimes.com',
                     'practiceupdate.com','the-hospitalist.org','pharmaceutical-journal.com','fiercebiotech.com',
                     'healthcareitnews.com','imedicalapps.com','technologyreview.com','mobihealthnews.com',
                     'health.com','ajog.org','youngwomenshealth.org','contemporaryobgyn.net','healthywomen.org',
                     'iwhc.org','menopause.org','ourbodiesourselves.org','rcog.org.uk','obgyn.onlinelibrary.wiley.com'
-                    'womenshealthmag.com','womenshealth.gov'] #Top 50 credible news websites
+                    'womenshealthmag.com','womenshealth.gov','theferret.scot','factcheck.org','fullfact.org',
+                    'healthfeedback.org','health.harvard.edu','my.clevelandclinic.org','hopkinsmedicine.org',
+                    'healthline.com', 'nih.gov', 'thelancet.com','sciencedaily.com','nejm.org','medpagetoday.com',
+                    'ama-assn.org','jamanetwork.com','healthaffairs.org','medlineplus.gov','healthday.com',
+                    'statnews.com','bmj.com','cancer.org','heart.org','diabetes.org','alz.org','arthritis.org',
+                    'parkinson.org','politifact.com','washingtonpost.com','snopes.com','washingtonpost.com',
+                    'mediabiasfactcheck.com'] #Top 50 credible news websites
    
    sources = ','.join(credible_sources)
    
@@ -69,7 +76,7 @@ def get_news_articles(user_input):
                if any(word in title for word in commonwords):
                    if any(word in description for word in commonwords):  # If the article contains one of the words, append it to the list to be saved
                        articles_to_append.append(article)
-   return articles_to_append[:20]
+   return articles_to_append
 
 def similar_claim(claim):
     url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
@@ -82,7 +89,6 @@ def similar_claim(claim):
     params = { #Parameters for the API request
         'query': claim,
         'key': api_key,
-        'pageSize': 20,
     }
     response = requests.get(url, params=params) #API request and get the response
     data = json.loads(response.text)
@@ -91,7 +97,7 @@ def similar_claim(claim):
         return []
     else:
         similar_claims = data["claims"]
-        return similar_claims[:20]
+        return similar_claims
         
 def create_article(articles, query_id): #function to add user articles to the database
     for article in articles:

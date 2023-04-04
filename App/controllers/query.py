@@ -18,9 +18,9 @@ def add_query(user):
   db.session.add(user)
   db.session.commit()
 
-a = "sk-DE438X2CUbLc8"
-b = "z9wUMQ2T3BlbkFJfopbt"
-c = "AsSDH9f02awv8ib"
+a = "sk-oWkyQ3ANmuoa5gJTJ"
+b = "FoZT3BlbkFJDVww"
+c = "4CwsV9llX8q61MCm"
 
 openai.api_key = a+b+c
 def generate_response(health_claim): # Function to generate a response to a health claim

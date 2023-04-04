@@ -1,10 +1,11 @@
 import openai
 import os
 
-a1 = "sk-BGnlSu6qwg"
-a2 = "SFD1CHiTc9T3Blbk"
-a3 = "FJScqmD4tX1lmeo0hG9IAh"
+a1 = "sk-QMI14RMwDxqHuBQq"
+a2 = "3qb1T3BlbkFJ4Jww1"
+a3 = "9xS5FKI1wcxjkIi"
 openai.api_key = a1+a2+a3
+
 
 def start_conversation():
     response = openai.Completion.create(
