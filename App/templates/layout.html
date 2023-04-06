@@ -110,8 +110,29 @@
           
           window: 0,
           window2: 0,
+          message: null,
                 }
+      },
+      methods:{
+      //retrieves form data from previous search stored in session and applies it to input binding
+      initFormDataState(){
+        if(sessionStorage.getItem('claim') != null){
+        const claim = JSON.parse(sessionStorage.getItem('claim') || '');
+        if(claim){
+          this.message = claim;
+        }
       }
+      },
+      //saves from data from proceeding search in session
+      saveFormDataState(){
+        const claim = JSON.stringify(this.message);
+        sessionStorage.setItem('claim', claim);
+      }
+    },
+    //triggers retrieval method on template render
+    created(){
+      this.initFormDataState();
+    }
 
     })
       .use(vuetify)

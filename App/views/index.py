@@ -5,7 +5,7 @@ from App.controllers import (
     generate_response,
     call_until_return
 )
-from flask import Blueprint, render_template, flash
+from flask import Blueprint, render_template, flash, request
 from App.forms.query import QueryForm
 
 index_views = Blueprint('index_views', __name__,
@@ -24,25 +24,25 @@ def index_about():
 
 @index_views.route('/checkclaim', methods=['GET'])
 def index_checkclaim():
-    form = QueryForm()
-    return render_template('claimcheck.html', form=form)
+    # form = QueryForm()
+    return render_template('claimcheck.html')
 
 
 @index_views.route('/checkclaim', methods=['POST'])
 def checkclaimAction():
-    form = QueryForm()
-    if form.validate:
-        prediction = health_classification(form.textarea.data)
-        response = call_until_return(generate_response, form.textarea.data)
-        news = get_news_articles(form.textarea.data)
-        prediction_int = int(prediction)
-        similar_claims = similar_claim(form.textarea.data)
-        if prediction_int == 1:
-            verdict = "this claim is most likely credible"
-            flash(f"  {verdict}")
-            flash(f"  {response}")
-        else:
-            verdict = "this claim is most likely NOT credible"
-            flash(f"  {verdict}")
-            flash(f"  {response}")
-    return render_template('claimcheck.html', form=form, news=news, similar_claims=similar_claims)
+    input = request.form.get("claim")
+
+    prediction = health_classification(input)
+    response = call_until_return(generate_response, input)
+    news = get_news_articles(input)
+    prediction_int = int(prediction)
+    similar_claims = similar_claim(input)
+    if prediction_int == 1:
+        verdict = "this claim is most likely credible"
+        flash(f"  {verdict}")
+        flash(f"  {response}")
+    else:
+        verdict = "this claim is most likely NOT credible"
+        flash(f"  {verdict}")
+        flash(f"  {response}")
+    return render_template('claimcheck.html', news=news, similar_claims=similar_claims)
