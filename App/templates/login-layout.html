@@ -57,9 +57,9 @@
                            <v-list-item-title class="text-subtitle-2 font-weight-medium" v-text="nav.title"></v-list-item-title>
                             </v-list-item>
                             {% if current_user.type == 'Doctor'%}
-                            <v-list-item prepend-icon="mdi-plus" href="/feed"> Feed
+                            <v-list-item prepend-icon="mdi-rss" href="/feed" style="color: white"> Feed
                             </v-list-item>
-                            <v-list-item prepend-icon="mdi-plus" href="/feedback">Contribute
+                            <v-list-item prepend-icon="mdi-plus" href="/feedback" style="color: white">Contribute
                             </v-list-item>
                             {% endif %}
 

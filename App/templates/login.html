@@ -5,38 +5,55 @@ page %}Login{% endblock %} {{ super() }} {% block content %}
     font-family: "Space Mono", monospace;
   }
 </style>
-<v-sheet class="cointaner" color="transparent" class="mt-15">
+<v-sheet
+  class="cointaner"
+  color="transparent"
+  class="d-flex flex-column mt-10"
+  width="100%"
+  height="100%"
+>
   {% if error %}
-  <nav class="white black-text" style="padding: 10px">
-    <div class="nav-wrapper">
-      <ul class="flashes">
-        <li>{{ error }}</li>
-      </ul>
-    </div>
-  </nav>
+  <p class="mb-10">{{ error }}</p>
+
   {% endif %}
-  <section class="container">
-    <h2>Login</h2>
+  <v-sheet width="60%" class="mx-auto" color="transparent">
+    <form class="col s12 m8 offset-m2" method="POST" action="/login">
+      <p class="text-h4">Login</p>
+      <div class="input-field col s12 m8 offset-m2">
+        <v-text-field
+          name="username"
+          type="input"
+          density="compact"
+          variant="outlined"
+          class="px-5"
+          placeholder="username"
+        ></v-text-field>
+      </div>
+
+      <div class="input-field col s12 m8 offset-m2">
+        <v-text-field
+          name="password"
+          type="input"
+          density="compact"
+          variant="outlined"
+          class="px-5"
+          placeholder="password"
+        ></v-text-field>
+      </div>
+
+      <v-btn
+        type="submit"
+        variant="tonal"
+        rounded="lg"
+        size="x-large"
+        class="mb-5"
+      >
+        Login
+      </v-btn>
+    </form>
     <p>
       No account as yet? <a href="/usersignup"><strong>Signup</strong></a>
     </p>
-  </section>
-  <main class="container">
-    <form class="col s12 m8 offset-m2" method="POST" action="/login">
-      {{ form.csrf_token }}
-
-      <div class="input-field col s12 m8 offset-m2">
-        <i class="material-icons prefix">account_circle</i>
-        {{ form.username(size=20, class="validate") }} {{ form.username.label }}
-      </div>
-
-      <div class="input-field col s12 m8 offset-m2">
-        <i class="material-icons prefix">lock</i>
-        {{ form.password(size=20, class="validate") }} {{ form.password.label }}
-      </div>
-
-      <div class="input-field col s12 m8 offset-m2">{{form.submit}}</div>
-    </form>
-  </main>
+  </v-sheet>
 </v-sheet>
 {% endblock %}

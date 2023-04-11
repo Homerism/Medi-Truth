@@ -12,42 +12,45 @@
   }
   
 </style>
-<div class="split-screen">
-  <div class="left">
-    <section class="copy">
-      <p>Already have an account? <a href="/login"><strong>Log in</strong></a></p>
-      <p>Are you a medical practitioner? <a href="/doctorsignup"><strong>Sign Up Here</strong></a></p>
-    </section>
-  </div>
-   
-  <div class="row">
-    
-      <div class="card grey"> 
+<v-sheet class="cointaner" color="transparent" class="d-flex flex-column mt-10" width="100%" height="100%">
+
+  <v-sheet width="60%" class="mx-auto" color="transparent">
       <form id="myForm" class="col s12 m8 offset-m2" method="POST" action="/usersignup">
-          {{ form.csrf_token }}
+
          
-          <h4>Sign Up</h4>
+          <p class="text-h4">Sign Up</p>
           <div class="input-field col s12 m8 offset-m2">
-            <i class="material-icons prefix">account_circle</i>
-            {{ form.username(size=20, class="validate") }}
-            {{ form.username.label }}
+            <v-text-field
+            name="username"
+            type="input"
+            density="compact"
+            variant="outlined"
+            class="px-5"
+            placeholder="username"
+          ></v-text-field>
           </div>
 
           <div class="input-field col s12 m8 offset-m2">
-            <i class="material-icons prefix">lock</i>
-            {{ form.password(size=20, class="validate") }}
-            {{ form.password.label }}
+            <v-text-field
+            name="password"
+            type="input"
+            density="compact"
+            variant="outlined"
+            class="px-5"
+            placeholder="password"
+          ></v-text-field>
           </div>
           <div class="input-field col s12 m8 offset-m2">
-            {{form.submit}}
           </div> 
        
+          <v-btn type="submit" variant="tonal" rounded="lg" size="x-large" class="mb-5">
+            Sign Up
+          </v-btn>
       </form>
 
-      </div> 
-    
-  </div>
-</div>
-  
-</div>  
+      <p>Already have an account? <a href="/login"><strong>Log in</strong></a></p>
+      <p>Are you a doctor? <a href="/doctorsignup"><strong>Sign up</strong></a></p>
+    </v-sheet>
+
+</vhseet>  
 {% endblock %}

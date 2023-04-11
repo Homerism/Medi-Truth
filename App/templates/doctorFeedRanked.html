@@ -1,43 +1,115 @@
-{% extends "login-layout.html" %}
-{% block title %}feed page{% endblock %}
-{% block page %}HMA{% endblock %}
-{{ super() }}
-{% block content %}
-<h1>Ranked Articles</h1>
-{% if articles or results %}
-<p>Filter by: <a href="/rankedfeed/{{1}}">Approved</a>   <a href="/rankedfeed/{{0}}">Disapproved</a></p>
-{% else %}
-<div></div>
-{% endif %}
-{% if not results %}
-{% for eachArticle in articles %}
-<div>
-    <ul>
-        <li><img src="{{ eachArticle.img }}" alt="no image" width="200" height="200"></li>
-        <li><b style="font-size:25px"> {{ eachArticle.title }} </b></li>
-        <li> {{ eachArticle.content }} </li>
-        <li style="font-size:13px"><b >Author(s):</b> {{ eachArticle.author }} </li>
-        <li style="font-size:13px"><b >publish date: </b> {{ eachArticle.publish }} </li>
-        <li><a href="{{ eachArticle.url }}">Read More</a></li>
-        <a href="/rankedfeed/approved/{{ eachArticle.id }}">Approve</a><a href="/rankedfeed/disapproved/{{ eachArticle.id }}">Disapprove</a>
-        <hr>
-    </ul>
-</div>
-{% endfor %}
-{% else %}
-{% for eachArticle in results %}
-<div>
-    <ul>
-        <li><img src="{{ eachArticle.img }}" alt="no image" width="200" height="200"></li>
-        <li><b style="font-size:25px"> {{ eachArticle.title }} </b></li>
-        <li> {{ eachArticle.content }} </li>
-        <li style="font-size:13px"><b >Author(s):</b> {{ eachArticle.author }} </li>
-        <li style="font-size:13px"><b >publish date: </b> {{ eachArticle.publish }} </li>
-        <li><a href="{{ eachArticle.url }}">Read More</a></li>
-        <a href="/rankedfeed/approved/{{ eachArticle.id }}">Approve</a><a href="/rankedfeed/disapproved/{{ eachArticle.id }}">Disapprove</a>
-        <hr>
-    </ul>
-</div>
-{% endfor %}
-{% endif %}
+{% extends "login-layout.html" %} {% block title %}feed page{% endblock %} {%
+block page %}HMA{% endblock %} {{ super() }} {% block content %}
+<v-sheet
+  class="cointaner"
+  color="transparent"
+  class="d-flex flex-column mt-10"
+  width="100%"
+  height="100%"
+>
+  <h1>Ranked Articles</h1>
+  {% if articles or results %}
+  <p>
+    Filter by:
+    <v-chip><a href="/rankedfeed/{{1}}">Approved</a></v-chip>
+    <v-chip><a href="/rankedfeed/{{0}}">Disapproved</a></v-chip>
+  </p>
+  {% else %}
+  <div></div>
+  {% endif %} {% if not results %} {% for eachArticle in articles %}
+  <v-card
+    width="100%"
+    height="430"
+    class="mx-auto text-left pb-3 my-5"
+    variant="tonal"
+  >
+    <template v-slot:title>
+      <div class="d-flex flex-column">
+        <img
+          src="{{ eachArticle.img }}"
+          alt="no image"
+          width="200"
+          height="200"
+        />
+
+        <p class="text-h4">{{ eachArticle.title }}</p>
+      </div>
+    </template>
+
+    <template v-slot:subtitle>
+      Author(s): {{ eachArticle.author }} Publish date: {{ eachArticle.publish
+      }}</template
+    >
+
+    <template v-slot:text> {{ eachArticle.content }} </template>
+
+    <v-card-actions class="d-flex my-auto align-end">
+      <v-btn variant="tonal" class="mx-2" href="{{ eachArticle.url }}">
+        Read More
+      </v-btn>
+      <v-btn
+        variant="tonal"
+        class="mx-2"
+        href="/rankedfeed/approved/{{ eachArticle.id }}"
+      >
+        Approve
+      </v-btn>
+      <v-btn
+        variant="tonal"
+        class="mx-2"
+        href="/rankedfeed/disapproved/{{ eachArticle.id }}"
+      >
+        Disapprove
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+  {% endfor %} {% else %} {% for eachArticle in results %}
+  <v-card
+    width="100%"
+    height="430"
+    class="mx-auto text-left pb-3 my-5"
+    variant="tonal"
+  >
+    <template v-slot:title>
+      <div class="d-flex flex-column">
+        <img
+          src="{{ eachArticle.img }}"
+          alt="no image"
+          width="200"
+          height="200"
+        />
+
+        <p class="text-h4">{{ eachArticle.title }}</p>
+      </div>
+    </template>
+
+    <template v-slot:subtitle>
+      Author(s): {{ eachArticle.author }} Publish date: {{ eachArticle.publish
+      }}</template
+    >
+
+    <template v-slot:text> {{ eachArticle.content }} </template>
+
+    <v-card-actions class="d-flex my-auto align-end">
+      <v-btn variant="tonal" class="mx-2" href="{{ eachArticle.url }}">
+        Read More
+      </v-btn>
+      <v-btn
+        variant="tonal"
+        class="mx-2"
+        href="/rankedfeed/approved/{{ eachArticle.id }}"
+      >
+        Approve
+      </v-btn>
+      <v-btn
+        variant="tonal"
+        class="mx-2"
+        href="/rankedfeed/disapproved/{{ eachArticle.id }}"
+      >
+        Disapprove
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+  {% endfor %} {% endif %}
+</v-sheet>
 {% endblock %}

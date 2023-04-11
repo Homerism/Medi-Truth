@@ -1,57 +1,69 @@
-{% extends "login-layout.html" %}
-{% block title %}My Queries page{% endblock %}
-{% block page %}HMA{% endblock %}
-{{ super() }}
-{% block content %}
+{% extends "login-layout.html" %} {% block title %}My Queries page{% endblock %}
+{% block page %}HMA{% endblock %} {{ super() }} {% block content %}
 <style>
-  h2{
+  h2 {
     font-family: "Space Mono", monospace;
   }
 </style>
-  <main class="container">
-    <h2>Claim History</h2>
-<!------Filter Starts Here----------->
-    {% if user.queries or results %}
-    <p>Filter by: <a href="/filter/{{1}}">Credible</a>   <a href="/filter/{{0}}">Untrustworthy</a></p>
+<main class="container">
+  <h2>Claim History</h2>
+
+  {% if user.queries or results %}
+  <div class="mb-5">
+    <p>
+      Filter by:
+      <v-chip><a href="/filter/{{1}}">Credible</a></v-chip>
+      <v-chip><a href="/filter/{{0}}">Untrustworthy</a></v-chip>
+    </p>
+  </div>
   {% else %}
   <div></div>
-  {% endif %}
-<!------Filter Ends Here----------->
-    {% if not results %}
-    {% for query in user.queries %}
-        <ul>
-            <li><b>Claim:</b> {{ query.query_text }}</li>
-            <li><b>Verdict:</b> {{ query.verdict }}</li>
-            <li><b>Response:</b> {{ query.response }}</li>
-        </ul>
-        <form action="/details" method="post">
-            <input type="hidden" name="details" value="{{query.id}}">
-            <button type="submit">More Details</button>
-        </form>
+  {% endif %} {% if not results %} {% for query in user.queries %}
+  <v-card width="600" class="mx-auto text-left pb-3 my-5" variant="tonal">
+    <template v-slot:title> {{ query.query_text }} </template>
 
+    <template v-slot:subtitle> {{ query.verdict }} </template>
+
+    <template v-slot:text> {{ query.response }} </template>
+
+    <v-card-actions>
+      <form action="/details" method="post">
+        <input type="hidden" name="details" value="{{query.id}}" />
+      <v-btn variant="tonal" class="mx-2" type="submit">
+        More Details
+      </v-btn>
+    </form>
         <form action="/remove" method="post">
-          <input type="hidden" name="removal" value="{{query.id}}">
-          <button type="submit">Remove Query</button>
-      </form>
-        <hr>
-    {% endfor %}
-    {% else %}
-    {% for result in results %}
-    <ul>
-      <li><b>Claim:</b> {{ result.query_text }}</li>
-      <li><b>Verdict:</b> {{ result.verdict }}</li>
-      <li><b>Response:</b> {{ result.response }}</li>
-  </ul>
-  <form action="/details" method="post">
-      <input type="hidden" name="details" value="{{result.id}}">
-      <button type="submit">More Details</button>
-  </form>
-  <form action="/remove" method="post">
-    <input type="hidden" name="removal" value="{{result.id}}">
-    <button type="submit">Remove Query</button>
-</form>
-<hr>
-    {% endfor %}
-  {% endif %}
-  </main> 
+          <input type="hidden" name="removal" value="{{query.id}}" />
+          <v-btn variant="tonal" type="submit">
+        Remove Query
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+
+  {% endfor %} {% else %} {% for result in results %}  
+  <v-card width="600" class="mx-auto text-left pb-3 my-5" variant="tonal">
+    <template v-slot:title> {{ result.query_text }} </template>
+
+    <template v-slot:subtitle> {{ result.verdict }} </template>
+
+    <template v-slot:text> {{ result.response }} </template>
+
+    <v-card-actions>
+      <form action="/details" method="post">
+        <input type="hidden" name="details" value="{{result.id}}" />
+      <v-btn variant="tonal" class="mx-2" type="submit">
+        More Details
+      </v-btn>
+    </form>
+        <form action="/remove" method="post">
+          <input type="hidden" name="removal" value="{{result.id}}" />
+          <v-btn variant="tonal" type="submit">
+        Remove Query
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+
+  {% endfor %} {% endif %}
+</main>
 {% endblock %}
