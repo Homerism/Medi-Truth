@@ -3,9 +3,10 @@ from collections import Counter
 from App.database import db
 from App.models import Article, ArticleRate
 import requests
-import string
 import json
 import nltk
+import re
+
 
 # Set up News API credentials and base URL
 
@@ -15,19 +16,49 @@ a2 = "5b4cdbcd55e912715"
 newsapi_key = a1+a2
 base_url = "https://newsapi.org/v2/everything"
 
-def most_frequent_words(paragraph):
-    nltk.download('stopwords')
-    paragraph = paragraph.lower() # Convert paragraph to lowercase
-    words = paragraph.translate(str.maketrans('', '', string.punctuation)).split() # Remove punctuation and split paragraph into words
-    stop_words = set(stopwords.words('english')) # Remove stopwords
-    words = [word for word in words if word not in stop_words]
-    word_counts = Counter(words) # Count word frequencies and return the top three most frequent words
-    return [word for word, count in word_counts.most_common(3)]
+def most_common_words(paragraph):
+  stop_words = set(stopwords.words('english'))
+
+  paragraph = re.sub(r'\W+', ' ', paragraph)
+  modal_verbs = ['can', 'could', 'may', 'might', 'must', 'shall', 'should', 'will', 'would',
+                'ought to', 'had better', 'need to', 'have to', 'has to', 'be able to', 
+                'be allowed to', 'may as well', 'might as well', 'will have to', 'would have to',
+                'should have to', 'could have to', 'must have to', 'might have to', 'will be able to',
+                'would be able to', 'should be able to', 'could be able to', 'must be able to', 
+                'might be able to', 'may have to', 'might have to', 'will need to', 'would need to',
+                'should need to', 'could need to', 'must need to', 'might need to', 'may be able to',
+                'might be able to', 'shall be able to', 'should be able to', 'could be able to',
+                'must be able to', 'might have been able to', 'may have been able to', 'should have been able to',
+                'could have been able to', 'must have been able to', 'would have been able to', 'can do',
+                'could do', 'may do', 'might do', 'must do', 'shall do', 'should do', 'will do', 
+                'would do', 'ought to do', 'had better do', 'need to do', 'have to do', 'has to do', 
+                'be able to do', 'be allowed to do', 'may as well do', 'might as well do', 'will have to do',
+                'would have to do', 'should have to do', 'could have to do', 'must have to do', 'might have to do', 
+                'may be able to do', 'might be able to do', 'shall be able to do', 'should be able to do',
+                'could be able to do', 'must be able to do', 'might have been able to do', 'may have been able to do',
+                'should have been able to do', 'could have been able to do', 'must have been able to do', 'be supposed to',
+                'be expected to', 'be obliged to', 'be required to', 'be allowed to', 'be permitted to',
+                'be compelled to', 'be forbidden to', 'be entitled to', 'be empowered to', 'be authorised to',
+                'be mandated to', 'be ordered to', 'be directed to', 'be requested to', 'be advised to']
+
+  conjunctions = ['although', 'and', 'as', 'because', 'before', 'but', 'even if', 'even though', 
+                  'if', 'in order that', 'once', 'provided that', 'since', 'so', 'that', 'though',
+                  'unless', 'until', 'when', 'whenever', 'where', 'whereas', 'wherever', 'whether',
+                  'while', 'yet']
+
+  tokens = nltk.word_tokenize(paragraph)
+  tokens = [token.lower() for token in tokens if token.lower() not in stop_words and not token.isnumeric() and token.lower() not in modal_verbs and token.lower() not in conjunctions]
+  freq_dist = nltk.FreqDist(tokens)
+  most_frequent = freq_dist.most_common(50)
+  words=[]
+  for word, freq in most_frequent:
+      words.append(word)
+  
+  return words
 
 def get_news_articles(user_input):
-   words = most_frequent_words(user_input) #5 most frequent words from the 
+   words = most_common_words(user_input) #5 most frequent words from the 
    commonwords = ' OR '.join(words)
-   #'bbc.com','cnn.com','nytimes.com','theatlantic.com','npr.org','forbes.com','time.com',
    credible_sources = ['medgadget.com','news-medical.net','medscape.com','medicalnewstoday.com',
                     'webmd.com','mayoclinic.org','medicalxpress.com','bmj.com','healio.com',
                     'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov',
