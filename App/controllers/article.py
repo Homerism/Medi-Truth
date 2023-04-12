@@ -46,6 +46,7 @@ def most_common_words(paragraph):
                   'unless', 'until', 'when', 'whenever', 'where', 'whereas', 'wherever', 'whether',
                   'while', 'yet']
 
+  nltk.download('punkt')
   tokens = nltk.word_tokenize(paragraph)
   tokens = [token.lower() for token in tokens if token.lower() not in stop_words and not token.isnumeric() and token.lower() not in modal_verbs and token.lower() not in conjunctions]
   freq_dist = nltk.FreqDist(tokens)
@@ -64,7 +65,7 @@ def get_news_articles(user_input):
                     'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov',
                     'discovermagazine.com','knowablemagazine.org',
                     'livescience.com','mdedge.com','medicaldaily.com','medpagetoday.com'
-                    'newscientist.com','quantamagazine.org','reuters.com',
+                    'newscientist.com','quantamagazine.org',
                     'scientificamerican.com','statnews.com','beckershospitalreview.com',
                     'fiercehealthcare.com','hcplive.com','healthaffairs.org','healthitoutcomes.com',
                     'healthcaredive.com','mmm-online.com','modernhealthcare.com','pharmacytimes.com',

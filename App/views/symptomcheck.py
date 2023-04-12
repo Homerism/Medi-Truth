@@ -12,7 +12,7 @@ def index():
 @login_required
 def get_symptom_diagnosis():
     symptom_to_condition = {
-        "fever": ["flu", "COVID-19", "pneumonia",'Influenza', 'Pneumonia', 'Malaria'],
+        "fever": ["flu", "COVID-19", "pneumonia",'Influenza', 'Malaria'],
         "cough": ["common cold", "bronchitis", "COVID-19",'Pneumonia', 'Asthma'],
         "headache": ["migraine", "tension headache", "sinusitis",'Cluster headache'],
         "nausea": ["food poisoning", "gastroenteritis", "migraine"],
