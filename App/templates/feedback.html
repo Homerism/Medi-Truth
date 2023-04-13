@@ -1,8 +1,5 @@
-<html>
-    <head>
-        <title>Contribution</title>
-    </head>
-    <body>
+{% extends "login-layout.html" %} {% block title %}profile page{% endblock %} {%
+    block page %}HMA{% endblock %} {{ super() }} {% block content %}
 <form method="post" action="/feedback">
     <label for="statement">Please enter a Health/Medical Claim:</label><br>
     <input type="text" id="statement" name="statement" required><br>
@@ -17,5 +14,5 @@
 </form>
 
 <p>{{ error }}</p>
-</body>
-</html>
+{% endblock %}
+

@@ -46,7 +46,7 @@ def most_common_words(paragraph):
                   'unless', 'until', 'when', 'whenever', 'where', 'whereas', 'wherever', 'whether',
                   'while', 'yet']
 
-  nltk.download('punkt')
+  nltk.download('punkt', quiet=True)
   tokens = nltk.word_tokenize(paragraph)
   tokens = [token.lower() for token in tokens if token.lower() not in stop_words and not token.isnumeric() and token.lower() not in modal_verbs and token.lower() not in conjunctions]
   freq_dist = nltk.FreqDist(tokens)

@@ -9,6 +9,7 @@ Original file is located at
 from sklearn.linear_model import PassiveAggressiveClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
+from nltk.stem.porter import PorterStemmer
 from sklearn.metrics import accuracy_score
 from nltk.corpus import stopwords
 import pandas as pd
@@ -16,7 +17,6 @@ import string
 import nltk
 import csv
 import re
-
 
 # Define word optimization function to clean text data
 def clean_text(text):
@@ -30,20 +30,29 @@ def clean_text(text):
     claim = re.sub('\w*\d\w*', '', text)    
     return claim
 
+stemmer = PorterStemmer()
+def stem(text):
+    claim = re.sub('[^a-zA-Z]',' ',text)
+    claim = claim.lower()
+    claim = claim.split()
+    claim = [stemmer.stem(word) for word in claim if not word in stopwords.words('english')]
+    claim = ' '.join(claim)
+    return claim
+
 def algorithm():
     # Download nltk stopwords
-    nltk.download('stopwords')
+    nltk.download('stopwords', quiet=True)
 
     # Load health claims dataset to a pandas DataFrame
     health_claims = pd.read_csv('App/controllers/claims.csv')
 
     health_claims.shape #not necessary
 
-    #counting missing values in dataset
-    health_claims.isnull().sum() #not necessary
-
     # Replace null values with empty string
     health_claims = health_claims.fillna('')
+
+    # Remove duplicates from dataset
+    health_claims = health_claims.drop_duplicates()
 
     # Placing the statement column columns into 'contents' column
     health_claims['contents'] = health_claims['statement']
@@ -54,6 +63,7 @@ def algorithm():
 
     # Clean 'contents' column using the clean_text function
     health_claims['contents'] = health_claims['contents'].apply(clean_text)
+    health_claims['contents'] = health_claims['contents'].apply(stem)
 
     X = health_claims['contents'].values
     Y = health_claims['rating'].values
@@ -66,12 +76,11 @@ def algorithm():
     # Split data into training and testing sets
     x_train, x_test, y_train, y_test = train_test_split(X, Y, stratify=Y, test_size=0.2, random_state=2)
 
-    # Train the Passive Aggressive Classifier model
+    # Trainning of the Passive Aggressive Classifier model
     model = PassiveAggressiveClassifier(max_iter=100)
     model.fit(x_train,y_train)
 
     # Evaluate the model on the training set
-
     x_prediction = model.predict(x_train)
     model_score = accuracy_score(x_prediction, y_train)
 
@@ -84,4 +93,3 @@ def data_in_csv_check(statement):
             if row[2].strip() == statement:
                 return True
         return False
-

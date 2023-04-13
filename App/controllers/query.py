@@ -3,13 +3,17 @@ from App.models import Query
 import openai
 
 from App.controllers.algorithm import (
-   algorithm
+   algorithm,
+   clean_text,
+   stem
 )
 
 model,vector = algorithm()
 
-def health_classification(news):
-  input_data = [news]
+def health_classification(claim):
+  claim = clean_text(claim)
+  claim = stem(claim)
+  input_data = [claim]
   vector_data = vector.transform(input_data)
   prediction = model.predict(vector_data)
   return prediction

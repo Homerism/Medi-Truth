@@ -6,7 +6,6 @@ a2 = "3qb1T3BlbkFJ4Jww1"
 a3 = "9xS5FKI1wcxjkIi"
 openai.api_key = a1+a2+a3
 
-
 def start_conversation():
     response = openai.Completion.create(
         engine="text-davinci-002",

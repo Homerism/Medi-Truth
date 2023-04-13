@@ -2,7 +2,6 @@ import flask_login
 from flask_jwt import JWT
 from App.models import User
 
-
 def authenticate(username, type, password):
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
@@ -15,7 +14,6 @@ def identity(payload):
 
 def login_user(user, remember):
     return flask_login.login_user(user, remember=remember)
-
 
 def logout_user():
     flask_login.logout_user()
