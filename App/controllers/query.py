@@ -1,14 +1,18 @@
-from App.database import db
 from App.models import Query
+from App.database import db
 import openai
+import joblib
 
 from App.controllers.algorithm import (
-   algorithm,
-   clean_text,
+   clean_text, 
    stem
 )
 
-model,vector = algorithm()
+# Import the vectorizer
+vector = joblib.load('App/controllers/vector.joblib')
+
+# Import the model
+model = joblib.load('App/controllers/model.joblib')
 
 def health_classification(claim):
   claim = clean_text(claim)

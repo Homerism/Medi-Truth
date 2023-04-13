@@ -41,7 +41,7 @@ def stem(text):
 
 def algorithm():
     # Download nltk stopwords
-    nltk.download('stopwords', quiet=True)
+    nltk.download('stopwords')
 
     # Load health claims dataset to a pandas DataFrame
     health_claims = pd.read_csv('App/controllers/claims.csv')
@@ -57,13 +57,17 @@ def algorithm():
     # Placing the statement column columns into 'contents' column
     health_claims['contents'] = health_claims['statement']
 
-    # Separate data and label
-    X = health_claims.drop(columns='rating', axis=1)
-    Y = health_claims['rating']
+    # Stemm contents to root word
+    health_claims['contents'] = health_claims['contents'].apply(stem)
+
+    print(health_claims['contents'])
 
     # Clean 'contents' column using the clean_text function
     health_claims['contents'] = health_claims['contents'].apply(clean_text)
-    health_claims['contents'] = health_claims['contents'].apply(stem)
+
+    # Separate data and label
+    X = health_claims.drop(columns='rating', axis=1)
+    Y = health_claims['rating']
 
     X = health_claims['contents'].values
     Y = health_claims['rating'].values
@@ -79,10 +83,6 @@ def algorithm():
     # Trainning of the Passive Aggressive Classifier model
     model = PassiveAggressiveClassifier(max_iter=100)
     model.fit(x_train,y_train)
-
-    # Evaluate the model on the training set
-    x_prediction = model.predict(x_train)
-    model_score = accuracy_score(x_prediction, y_train)
 
     return model, vector
 
