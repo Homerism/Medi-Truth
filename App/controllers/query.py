@@ -1,5 +1,6 @@
 from App.models import Query
 from App.database import db
+import nltk
 import openai
 import joblib
 
@@ -7,6 +8,8 @@ from App.controllers.algorithm import (
    clean_text, 
    stem
 )
+
+nltk.download('stopwords')
 
 # Import the vectorizer
 vector = joblib.load('App/controllers/vector.joblib')

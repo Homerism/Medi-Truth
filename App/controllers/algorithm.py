@@ -9,6 +9,7 @@ Original file is located at
 from sklearn.linear_model import PassiveAggressiveClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
+import nltk
 from nltk.stem.porter import PorterStemmer
 from sklearn.metrics import accuracy_score
 from nltk.corpus import stopwords
@@ -17,6 +18,8 @@ import string
 import nltk
 import csv
 import re
+
+nltk.download('stopwords')
 
 # Define word optimization function to clean text data
 def clean_text(text):
