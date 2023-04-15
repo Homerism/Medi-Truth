@@ -1,7 +1,7 @@
 
 services:
 - type: web
-  name: flask-postgres-api
+  name: MediTruth
   env: python
   repo: https://github.com/JDHomere/qualityassurance.git
   plan: free
