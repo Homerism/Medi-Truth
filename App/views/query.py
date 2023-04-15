@@ -1,8 +1,7 @@
 from flask import Blueprint,render_template, request, flash
 from flask_login import login_required, current_user 
-from App.database import db
-from App.forms.query import QueryForm
 from App.models import Query, ArticleRate
+from App.database import db
 
 query_views = Blueprint('query_views', __name__, template_folder='../templates')
 
@@ -19,59 +18,44 @@ from App.controllers import (
     create_query,
     create_article_for_doctors,
     calculate_rating,
-    get_article_id
+    get_article_id,
+    query_check
 )
 
 @query_views.route('/query', methods=['GET'])
 @login_required
 def index_page():
-    form = QueryForm()
-    return render_template('profile.html', form=form)
+    return render_template('profile.html')
 
 @query_views.route('/query', methods=['POST'])
-@login_required
 def queryAction():
-    form = QueryForm()
-    if form.validate:
-       curr_user_id = current_user.id
-       curr_user = get_user(curr_user_id)
-       queryInList = False
-       prediction = health_classification(form.textarea.data)
-       response = call_until_return(generate_response,form.textarea.data)
-       news = get_news_articles(form.textarea.data)
-       #for doctor feed
-       storedArticles = ArticleRate.query.all()
-       create_article_for_doctors(news,storedArticles)
-       #end doctor feed
-       prediction_int = int(prediction)
-       similar_claims = similar_claim(form.textarea.data)
-       if prediction_int == 1:
-            verdict = "this claim is most likely credible"
-            for eachQuery in curr_user.queries:
-                if (eachQuery.query_text == form.textarea.data):
-                    queryInList = True
-                    break
-            if not queryInList:
-                query = create_query(form.textarea.data, response, verdict)
-                curr_user.queries.append(query)
-                add_query(curr_user)
-                create_article(news,query.id)
-                queryInList = False
-            flash(f" {prediction_int} {verdict} {response}")    
-       else:
-            verdict = "this claim is most likely NOT credible"
-            for eachQuery in curr_user.queries:
-                if (eachQuery.query_text == form.textarea.data):
-                    queryInList = True
-                    break
-            if not queryInList:
-                query = create_query(form.textarea.data, response, verdict)
-                curr_user.queries.append(query)
-                add_query(curr_user)
-                create_article(news,query.id)
-                queryInList = False
-            flash(f" {prediction_int} {verdict} {response}")    
-    return render_template('profile.html', form=form, news=news, similar_claims=similar_claims, get_article_id=get_article_id, calculate_rating=calculate_rating,str=str,int=int)
+    input = request.form.get("claim")
+    prediction = health_classification(input)
+    prediction_int = int(prediction)
+    similar_claims = similar_claim(input)
+    curr_user = get_user(current_user.id)
+    curr_user_queries = curr_user.queries
+    check_query = query_check(curr_user_queries, input)
+    print(check_query)
+    if not check_query:
+        response = call_until_return(generate_response, input)
+        news = get_news_articles(input)
+        storedArticles = ArticleRate.query.all()
+        create_article_for_doctors(news, storedArticles)
+        verdict = "This Claim Is Most Likely Credible." if prediction_int == 1 else "This Claim Is Most Likely NOT Credible."
+        query = create_query(input, response, verdict)
+        curr_user.queries.append(query)
+        add_query(curr_user)
+        create_article(news, query.id)
+        flash(f"  {verdict}")
+        flash(f"  {response}")
+    else:
+        news = get_news_articles(input)
+        response = call_until_return(generate_response, input)
+        verdict = "This Claim Is Most Likely Credible." if prediction_int == 1 else "This Claim Is Most Likely NOT Credible."
+        flash(f"  {verdict}")
+        flash(f"  {response}")
+    return render_template('profile.html', news=news, similar_claims=similar_claims, get_article_id=get_article_id, calculate_rating=calculate_rating, str=str, int=int)
 
 @query_views.route('/queries', methods=['GET'])
 @login_required
@@ -87,9 +71,9 @@ def filter(id):
     curr_user = get_user(curr_user_id)
     verdict =""
     if id == 1:
-        verdict = "this claim is most likely credible"
+        verdict = "This Claim Is Most Likely Credible."
     else:
-        verdict = "this claim is most likely NOT credible"
+        verdict = "This Claim Is Most Likely NOT Credible."
     results = Query.query.filter_by(user_id=curr_user_id, verdict=verdict).all()
     if not results:
         flash(f"None Found.")

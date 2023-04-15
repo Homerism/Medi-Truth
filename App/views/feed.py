@@ -53,42 +53,25 @@ def dislike(article_id):
 @login_required
 def ranked_queries_page():
     curr_user_id = current_user.id
-    rankedArticles = DoctorReaction.query.filter_by(user_id=curr_user_id)
-    doctorArticles = ArticleRate.query.all()
-    doctorArticleList = []
-    for eachArticle in rankedArticles:
-       for eachDoctorArticle in doctorArticles:
-          if(eachArticle.article_id == eachDoctorArticle.id):
-            doctorArticleList.append(eachDoctorArticle)
+    doctorArticleList = db.session.query(ArticleRate).join(DoctorReaction, ArticleRate.id == DoctorReaction.article_id).\
+        filter(DoctorReaction.user_id == curr_user_id).all()
     return render_template('doctorFeedRanked.html', articles=doctorArticleList)
 
 @feed_views.route('/rankedfeed/<int:id>')
 @login_required
 def filter(id):
-  curr_user_id = current_user.id
-  react = ""
-  if id == 1:
-     react = "Approve"
-  else:
-     react = "Disapprove"
-  specificArticles = DoctorReaction.query.filter_by(user_id=curr_user_id,react=react)
-  rankedArticles = DoctorReaction.query.filter_by(user_id=curr_user_id)
-  doctorArticles = ArticleRate.query.all()
-  doctorArticleList = []
-  for eachArticle in rankedArticles:
-     for eachDoctorArticle in doctorArticles:
-        if(eachArticle.article_id == eachDoctorArticle.id):
-           doctorArticleList.append(eachDoctorArticle)
-  
-  results = []
-
-  for eachArticle in specificArticles:
-     for eachDoctorArticle in doctorArticles:
-        if(eachArticle.article_id == eachDoctorArticle.id):
-           results.append(eachDoctorArticle)
-  if not results:
-     flash(f"None Found.")
-  return render_template('doctorFeedRanked.html', results=results, articles=doctorArticleList)
+    curr_user_id = current_user.id
+    react = "Approve" if id == 1 else "Disapprove"
+    doctorArticleList = db.session.query(ArticleRate).all()
+    rankedArticles = db.session.query(DoctorReaction, ArticleRate).join(ArticleRate, DoctorReaction.article_id == ArticleRate.id).filter(DoctorReaction.user_id == curr_user_id, DoctorReaction.react == react).all()
+    specificArticles = db.session.query(DoctorReaction, ArticleRate).join(ArticleRate, DoctorReaction.article_id == ArticleRate.id).filter(DoctorReaction.user_id == curr_user_id, DoctorReaction.react == react).all()
+    
+    if not specificArticles:
+        flash(f"None Found.")
+    
+    results = [article for _, article in specificArticles]
+    
+    return render_template('doctorFeedRanked.html', results=results, articles=doctorArticleList)
 
 @feed_views.route('/rankedfeed/approved/<int:article_id>')
 @login_required

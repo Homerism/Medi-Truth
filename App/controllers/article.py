@@ -7,9 +7,7 @@ import json
 import nltk
 import re
 
-
-# Set up News API credentials and base URL
-
+# News API credentials and base URL
 a1 = "3e40cfef90d74e9"
 a2 = "5b4cdbcd55e912715"
 
@@ -18,7 +16,6 @@ base_url = "https://newsapi.org/v2/everything"
 
 def most_common_words(paragraph):
   stop_words = set(stopwords.words('english'))
-
   paragraph = re.sub(r'\W+', ' ', paragraph)
   modal_verbs = ['can', 'could', 'may', 'might', 'must', 'shall', 'should', 'will', 'would',
                 'ought to', 'had better', 'need to', 'have to', 'has to', 'be able to', 
@@ -54,7 +51,6 @@ def most_common_words(paragraph):
   words=[]
   for word, freq in most_frequent:
       words.append(word)
-  
   return words
 
 def get_news_articles(user_input):
@@ -108,7 +104,7 @@ def get_news_articles(user_input):
                if any(word in title for word in commonwords):
                    if any(word in description for word in commonwords):  # If the article contains one of the words, append it to the list to be saved
                        articles_to_append.append(article)
-   return articles_to_append
+   return articles_to_append[:20]
 
 def similar_claim(claim):
     url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
@@ -125,42 +121,36 @@ def similar_claim(claim):
     response = requests.get(url, params=params) #API request and get the response
     data = json.loads(response.text)
     
-    if not data:
-        return []
-    else:
+    if "claims" in data:
         similar_claims = data["claims"]
         return similar_claims
+    else:
+        return []
         
-def create_article(articles, query_id): #function to add user articles to the database
+def create_article(articles, query_id):
+    articles_data = []
     for article in articles:
-        userarticle = Article(title=article["title"],
-                              author=article["author"],
-                              url=article["url"],
-                              content=article["content"],
-                              publish=article["publishedAt"],
-                              img=article["urlToImage"], 
-                              query_id=query_id)
-        db.session.add(userarticle)
-        db.session.commit()
+        articles_data.append({
+            'title': article["title"],
+            'author': article["author"],
+            'url': article["url"],
+            'content': article["content"],
+            'publish': article["publishedAt"],
+            'img': article["urlToImage"],
+            'query_id': query_id
+        })
+    db.session.bulk_insert_mappings(Article, articles_data)
+    db.session.commit()
 
-def create_article_for_doctors(articles, stored_articles): #adding articles(no repeats) for the doctor feed
-    check = False
-    
+def create_article_for_doctors(articles, stored_titles):
     for article in articles:
-        for each in stored_articles:
-            if each.title == article["title"]:
-                check = True
-                break
-        
-        if(not check):    
+        if article["title"] not in stored_titles:
             userarticle = ArticleRate(title=article["title"],
-                                author=article["author"],
-                                url=article["url"],
-                                content=article["content"],
-                                publish=article["publishedAt"],
-                                img=article["urlToImage"])
+                                      author=article["author"],
+                                      url=article["url"],
+                                      content=article["content"],
+                                      publish=article["publishedAt"],
+                                      img=article["urlToImage"])
             db.session.add(userarticle)
-            db.session.commit() 
-        else:
-            check = False           
+            db.session.commit()       
 

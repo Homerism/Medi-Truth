@@ -1,8 +1,9 @@
 from App.models import Query
 from App.database import db
-import nltk
-import openai
+from openai import error
 import joblib
+import openai
+import nltk
 
 from App.controllers.algorithm import (
    clean_text, 
@@ -10,10 +11,8 @@ from App.controllers.algorithm import (
 )
 
 nltk.download('stopwords')
-
 # Import the vectorizer
 vector = joblib.load('App/controllers/vector.joblib')
-
 # Import the model
 model = joblib.load('App/controllers/model.joblib')
 
@@ -34,22 +33,28 @@ b = "FoZT3BlbkFJDVww"
 c = "4CwsV9llX8q61MCm"
 
 openai.api_key = a+b+c
-def generate_response(health_claim): # Function to generate a response to a health claim
-    
-    model_engine = "text-davinci-002"
-    prompt = f"Health claim: {health_claim}\nResponse:"
-    temperature = 0.7
-    max_tokens = 100
-    stop = "\n"
-    response = openai.Completion.create(
-        engine=model_engine,
-        prompt=prompt,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        stop=stop
-    )
-    generated_text = response.choices[0].text.strip()
-    return generated_text
+def generate_response(health_claim):
+    if not health_claim:
+       return None
+    try:
+        model_engine = "text-davinci-002"
+        prompt = f"Health claim: {health_claim}\nResponse:"
+        temperature = 0.7
+        max_tokens = 100
+        stop = "\n"
+        response = openai.Completion.create(
+            engine=model_engine,
+            prompt=prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            stop=stop
+        )
+        generated_text = response.choices[0].text.strip()
+        return generated_text
+    except error.APIConnectionError as e:
+        # Handle the APIConnectionError exception here
+        print("Error communicating with OpenAI:", e)
+        return None
 
 def call_until_return(func,text):
     result = func(text)
@@ -68,3 +73,11 @@ def create_query(text, response, verdict):
 
 def get_query(id):
     return Query.query.get(id)
+
+def query_check(user_query, input):
+  queryInList = False
+  for eachQuery in user_query:
+    if (eachQuery.query_text == input):
+      queryInList = True
+      break
+  return queryInList

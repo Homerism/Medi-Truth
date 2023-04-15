@@ -1,4 +1,5 @@
 import openai
+from openai import error
 import os
 
 a1 = "sk-QMI14RMwDxqHuBQq"
@@ -7,27 +8,37 @@ a3 = "9xS5FKI1wcxjkIi"
 openai.api_key = a1+a2+a3
 
 def start_conversation():
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt="User: Hello\nAI:",
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
-    return response.choices[0].text
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt="User: Hello\nAI:",
+            max_tokens=1024,
+            n=1,
+            stop=None,
+            temperature=0.5,
+        )
+        return response.choices[0].text
+    except error.APIConnectionError as e:
+        # Handle the APIConnectionError exception here
+        print("Error communicating with OpenAI:", e)
+        return None
 
 def get_ai_response(conversation_history, user_input):
     prompt = f"User: {user_input}\nAI: {conversation_history}"
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=prompt,
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
-    return response.choices[0].text
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=prompt,
+            max_tokens=1024,
+            n=1,
+            stop=None,
+            temperature=0.5,
+        )
+        return response.choices[0].text
+    except error.APIConnectionError as e:
+        # Handle the APIConnectionError exception here
+        print("Error communicating with OpenAI:", e)
+        return None
 
 def call_until_return_response(func, history, input):
     result = func(history,input)

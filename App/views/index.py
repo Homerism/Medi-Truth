@@ -6,32 +6,25 @@ from App.controllers import (
     call_until_return
 )
 from flask import Blueprint, render_template, flash, request
-from App.forms.query import QueryForm
 
 index_views = Blueprint('index_views', __name__,
                         template_folder='../templates')
-
 
 @index_views.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
-
 @index_views.route('/about', methods=['GET'])
 def index_about():
     return render_template('about-us.html')
 
-
 @index_views.route('/checkclaim', methods=['GET'])
 def index_checkclaim():
-    # form = QueryForm()
     return render_template('claimcheck.html')
-
 
 @index_views.route('/checkclaim', methods=['POST'])
 def checkclaimAction():
     input = request.form.get("claim")
-
     prediction = health_classification(input)
     response = call_until_return(generate_response, input)
     news = get_news_articles(input)

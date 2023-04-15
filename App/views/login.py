@@ -4,14 +4,11 @@ from App.database import db
 from App.forms.login import LogIn
 from App.models import User
 
-login_views = Blueprint('login_views', __name__,
-                        template_folder='../templates')
-
+login_views = Blueprint('login_views', __name__,template_folder='../templates')
 
 @login_views.route('/login', methods=['GET'])
 def loginIndex():
     return render_template('login.html')
-
 
 @login_views.route('/login', methods=['POST'])
 def loginAction():
@@ -24,7 +21,6 @@ def loginAction():
         return redirect(url_for('query_views.index_page'))
     error = "Incorrect Password Input"
     return render_template('login.html', error=error)
-
 
 @login_views.route('/logout', methods=['GET'])
 @login_required
