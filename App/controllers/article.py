@@ -58,7 +58,7 @@ def get_news_articles(user_input):
    commonwords = ' OR '.join(words)
    credible_sources = ['medgadget.com','news-medical.net','medscape.com','medicalnewstoday.com',
                     'webmd.com','mayoclinic.org','medicalxpress.com','bmj.com','healio.com',
-                    'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov',
+                    'mobihealthnews.com','khn.org','who.int','fda.gov','cdc.gov','pubmed.ncbi.nlm.nih.gov',
                     'discovermagazine.com','knowablemagazine.org',
                     'livescience.com','mdedge.com','medicaldaily.com','medpagetoday.com'
                     'newscientist.com','quantamagazine.org',
@@ -68,13 +68,13 @@ def get_news_articles(user_input):
                     'practiceupdate.com','the-hospitalist.org','pharmaceutical-journal.com','fiercebiotech.com',
                     'healthcareitnews.com','imedicalapps.com','technologyreview.com','mobihealthnews.com',
                     'health.com','ajog.org','youngwomenshealth.org','contemporaryobgyn.net','healthywomen.org',
-                    'iwhc.org','menopause.org','ourbodiesourselves.org','rcog.org.uk','obgyn.onlinelibrary.wiley.com'
+                    'iwhc.org','menopause.org','ourbodiesourselves.org','rcog.org.uk','obgyn.onlinelibrary.wiley.com',
                     'womenshealthmag.com','womenshealth.gov','theferret.scot','factcheck.org','fullfact.org',
                     'healthfeedback.org','health.harvard.edu','my.clevelandclinic.org','hopkinsmedicine.org',
                     'healthline.com', 'nih.gov', 'thelancet.com','sciencedaily.com','nejm.org','medpagetoday.com',
                     'ama-assn.org','jamanetwork.com','healthaffairs.org','medlineplus.gov','healthday.com',
                     'statnews.com','bmj.com','cancer.org','heart.org','diabetes.org','alz.org','arthritis.org',
-                    'parkinson.org','politifact.com','washingtonpost.com','snopes.com','washingtonpost.com',
+                    'parkinson.org','politifact.com','washingtonpost.com','snopes.com',
                     'mediabiasfactcheck.com'] #Top 50 credible news websites
    
    sources = ','.join(credible_sources)
