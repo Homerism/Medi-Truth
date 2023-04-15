@@ -1,7 +1,7 @@
-from nltk.corpus import stopwords
-from collections import Counter
-from App.database import db
 from App.models import Article, ArticleRate
+from nltk.corpus import stopwords
+from App.database import db
+from lxml import etree
 import requests
 import json
 import nltk
@@ -154,3 +154,34 @@ def create_article_for_doctors(articles, stored_titles):
             db.session.add(userarticle)
             db.session.commit()       
 
+def scholar_articles(query):
+    words = most_common_words(query) #5 most frequent words from the 
+    query = ' '.join(words)
+    base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+    search_url = f"{base_url}esearch.fcgi?db=pubmed&term={query}"
+    response = requests.get(search_url)
+    root = etree.fromstring(response.content)
+
+    id_list = root.find(".//IdList")
+    ids = [id_element.text for id_element in id_list]
+
+    articles = []
+    for id in ids:
+        fetch_url = f"{base_url}efetch.fcgi?db=pubmed&id={id}&retmode=xml"
+        response = requests.get(fetch_url)
+        root = etree.fromstring(response.content)
+        article = root.find(".//PubmedArticle")
+        title = article.find(".//ArticleTitle")
+        title_text = title.text if title is not None else ""
+        author = article.findall(".//Author")
+        author_list = ", ".join([f"{a.find('LastName').text} {a.find('Initials').text}" 
+                                 for a in author 
+                                 if a.find('LastName') is not None and a.find('Initials') is not None])
+        pub_date = article.find(".//PubDate")
+        publishedAt= pub_date.find(".//Year").text if pub_date is not None and pub_date.find(".//Year") is not None else ""
+        url = f"https://pubmed.ncbi.nlm.nih.gov/{id}"
+        content = article.find(".//AbstractText")
+        excerpt_text = content.text if content is not None else ""
+        img = ""
+        articles.append({"title": title_text, "author": author_list, "publishedAt": publishedAt, "url": url, "content": excerpt_text, "img": img})
+    return articles

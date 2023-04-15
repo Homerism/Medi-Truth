@@ -40,8 +40,37 @@
   {% endif %} {% endwith %}
 
   <!-- If no article was submitted Display -->
+{% if not scholar %} {% else %}
+<h3 class="text-left">Scholar Articles</h3>
+<!-- Display Articles if claim was submitted-->
+<v-window v-model="window" show-arrows continuous>
+  {% for article in scholar %}
+  <v-window-item v-for="(n, index)" :key="index">
+    <v-card flat class="d=flex justify-center" color="transparent">
+      <v-card
+        width="85%"
+        height="200px"
+        class="text-left my-5 mx-auto"
+        variant="tonal"
+        flat
+        width="block"
+        title="{{article.title}}"
+        subtitle="Author: {{article.author}} Year: {{article.publishedAt}}"
+        text="{{article.content}}"
+      >
+        <v-card-actions>
+          <v-btn variant="text" href="{{article.url}}"> Learn More </v-btn>
+        </v-card-actions></v-card
+      >
+    </v-card>
+  </v-window-item>
+  {% endfor %} {% endif %}
+</v-window>
+
+  <!-- If no article was submitted Display -->
   {% if not news %} {% else %}
   <!-- Display Articles if claim was submitted-->
+  <h3 class="text-left">News Articles</h3>
   <v-window v-model="window" show-arrows continuous>
     {% for article in news %}
     <v-window-item v-for="(n, index)" :key="index">

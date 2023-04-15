@@ -1,14 +1,14 @@
+from flask import Blueprint, render_template, flash, request
+index_views = Blueprint('index_views', __name__,template_folder='../templates')
+
 from App.controllers import (
     health_classification,
     get_news_articles,
     similar_claim,
     generate_response,
-    call_until_return
+    call_until_return,
+    scholar_articles
 )
-from flask import Blueprint, render_template, flash, request
-
-index_views = Blueprint('index_views', __name__,
-                        template_folder='../templates')
 
 @index_views.route('/', methods=['GET'])
 def index():
@@ -28,6 +28,7 @@ def checkclaimAction():
     prediction = health_classification(input)
     response = call_until_return(generate_response, input)
     news = get_news_articles(input)
+    scholar = scholar_articles(input)
     prediction_int = int(prediction)
     similar_claims = similar_claim(input)
     if prediction_int == 1:
@@ -38,4 +39,4 @@ def checkclaimAction():
         verdict = "this claim is most likely NOT credible"
         flash(f"  {verdict}")
         flash(f"  {response}")
-    return render_template('claimcheck.html', news=news, similar_claims=similar_claims)
+    return render_template('claimcheck.html', news=news, scholar=scholar, similar_claims=similar_claims)
