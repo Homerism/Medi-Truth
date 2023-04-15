@@ -36,7 +36,6 @@ def queryAction():
     curr_user = get_user(current_user.id)
     curr_user_queries = curr_user.queries
     check_query = query_check(curr_user_queries, input)
-    print(check_query)
     if not check_query:
         response = call_until_return(generate_response, input)
         news = get_news_articles(input)

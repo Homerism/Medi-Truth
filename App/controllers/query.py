@@ -75,9 +75,4 @@ def get_query(id):
     return Query.query.get(id)
 
 def query_check(user_query, input):
-  queryInList = False
-  for eachQuery in user_query:
-    if (eachQuery.query_text == input):
-      queryInList = True
-      break
-  return queryInList
+    return any(query.query_text == input for query in user_query)
