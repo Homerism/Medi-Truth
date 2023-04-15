@@ -19,7 +19,8 @@ from App.controllers import (
     create_article_for_doctors,
     calculate_rating,
     get_article_id,
-    query_check
+    query_check,
+    scholar_articles
 )
 
 @query_views.route('/query', methods=['GET'])
@@ -39,6 +40,7 @@ def queryAction():
     if not check_query:
         response = call_until_return(generate_response, input)
         news = get_news_articles(input)
+        scholar = scholar_articles(input)
         storedArticles = ArticleRate.query.all()
         create_article_for_doctors(news, storedArticles)
         verdict = "This Claim Is Most Likely Credible." if prediction_int == 1 else "This Claim Is Most Likely NOT Credible."
@@ -50,11 +52,12 @@ def queryAction():
         flash(f"  {response}")
     else:
         news = get_news_articles(input)
+        scholar = scholar_articles(input)
         response = call_until_return(generate_response, input)
         verdict = "This Claim Is Most Likely Credible." if prediction_int == 1 else "This Claim Is Most Likely NOT Credible."
         flash(f"  {verdict}")
         flash(f"  {response}")
-    return render_template('profile.html', news=news, similar_claims=similar_claims, get_article_id=get_article_id, calculate_rating=calculate_rating, str=str, int=int)
+    return render_template('profile.html', news=news, scholar=scholar, similar_claims=similar_claims, get_article_id=get_article_id, calculate_rating=calculate_rating, str=str, int=int)
 
 @query_views.route('/queries', methods=['GET'])
 @login_required
