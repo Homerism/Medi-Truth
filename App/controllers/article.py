@@ -129,30 +129,33 @@ def similar_claim(claim):
         
 def create_article(articles, query_id):
     articles_data = []
-    for article in articles:
-        articles_data.append({
-            'title': article["title"],
-            'author': article["author"],
-            'url': article["url"],
-            'content': article["content"],
-            'publish': article["publishedAt"],
-            'img': article["urlToImage"],
-            'query_id': query_id
-        })
-    db.session.bulk_insert_mappings(Article, articles_data)
-    db.session.commit()
+    if articles:
+        for article in articles:
+            articles_data.append({
+                'title': article["title"],
+                'author': article["author"],
+                'url': article["url"],
+                'content': article["content"],
+                'publish': article["publishedAt"],
+                'img': article["urlToImage"],
+                'query_id': query_id
+            })
+        db.session.bulk_insert_mappings(Article, articles_data)
+        db.session.commit()
 
 def create_article_for_doctors(articles, stored_titles):
-    for article in articles:
-        if article["title"] not in stored_titles:
-            userarticle = ArticleRate(title=article["title"],
-                                      author=article["author"],
-                                      url=article["url"],
-                                      content=article["content"],
-                                      publish=article["publishedAt"],
-                                      img=article["urlToImage"])
-            db.session.add(userarticle)
-            db.session.commit()       
+    if articles:
+        for article in articles:
+            if article["title"] not in stored_titles:
+                userarticle = ArticleRate(title=article["title"],
+                                          author=article["author"],
+                                          url=article["url"],
+                                          content=article["content"],
+                                          publish=article["publishedAt"],
+                                          img=article["urlToImage"])
+                db.session.add(userarticle)
+                db.session.commit()
+       
 
 def scholar_articles(query):
     words = most_common_words(query) #5 most frequent words from the 
