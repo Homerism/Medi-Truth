@@ -43,10 +43,12 @@ def queryAction():
         scholar = scholar_articles(input)
         storedArticles = ArticleRate.query.all()
         create_article_for_doctors(news, storedArticles)
+        create_article_for_doctors(scholar, storedArticles)
         verdict = "This Claim Is Most Likely Credible." if prediction_int == 1 else "This Claim Is Most Likely NOT Credible."
         query = create_query(input, response, verdict)
         curr_user.queries.append(query)
         add_query(curr_user)
+        create_article(scholar, query.id)
         create_article(news, query.id)
         flash(f"  {verdict}")
         flash(f"  {response}")
