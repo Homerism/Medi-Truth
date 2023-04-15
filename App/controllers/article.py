@@ -182,6 +182,6 @@ def scholar_articles(query):
         url = f"https://pubmed.ncbi.nlm.nih.gov/{id}"
         content = article.find(".//AbstractText")
         excerpt_text = content.text if content is not None else ""
-        img = ""
-        articles.append({"title": title_text, "author": author_list, "publishedAt": publishedAt, "url": url, "content": excerpt_text, "img": img})
+        urlToImage = ""
+        articles.append({"title": title_text, "author": author_list, "publishedAt": publishedAt, "url": url, "content": excerpt_text, "urlToImage": urlToImage})
     return articles
