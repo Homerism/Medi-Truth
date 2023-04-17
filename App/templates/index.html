@@ -1,6 +1,5 @@
 {% extends "layout.html" %} {% block title %}Health Misinformation{% endblock %}
 {% block page %}HMA{% endblock %} {{ super() }} {% block content %}
-
 <v-sheet class="cointaner" color="transparent" class="mt-2">
   <!-- Medi Truth logo/ Title-->
   <v-img
@@ -21,18 +20,20 @@
   <!-- Info Section guides-->
   <v-sheet class="d-flex flex-row mt-15" color="transparent">
     <template v-for="guide in guides">
-      <v-card
-        flat
-        height="300"
-        width="300"
-        class="mx-4"
-        :title="guide.title"
-        :subtitle="guide.subtitle"
-        color="transparent"
-      >
-      </v-card>
+      <div class="infocard">
+        <v-card
+          flat
+          height="300"
+          width="300"
+          class="mx-4"
+          :title="guide.title"
+          :subtitle="guide.subtitle"
+          color="transparent"
+        >
+          <v-icon :icon="guide.icon" size="50" />
+        </v-card>
+      </div>
     </template>
   </v-sheet>
 </v-sheet>
-
 {% endblock %}

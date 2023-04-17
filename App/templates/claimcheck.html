@@ -1,133 +1,196 @@
 {% extends "layout.html" %} {% block title %}Health Misinformation{% endblock %}
 {% block page %}HMA{% endblock %} {{ super() }} {% block content %}
-<style>
-  .validate > {
-    display: none;
-  }
-
-  label {
-    display: none;
-  }
-</style>
 <v-sheet
   class="cointaner"
   color="transparent"
-  class="d-flex flex-column mt-5"
+  class="d-flex flex-column mt-2"
   width="100%"
   height="100%"
 >
-  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if not
   messages %}
-  <v-sheet class="text-left justify-left" color="transparent">
-    {% for category, message in messages %}
-    <v-list id="flashes" color="red" style="background: none">
-      <v-list-item
-        v-if="{{loop.index}} == 1"
-        class="text-h3"
-        style="color: white"
-        >{{ message }}</v-list-item
-      >
-      <v-list-item
-        v-if="{{loop.index}} == 2"
-        color="white"
-        style="color: #b6b6b6"
-        class="text-h6"
-        >{{ message }}</v-list-item
-      >
-    </v-list>
-    {% endfor %}
+  <!-- Initial Section-->
+  <v-sheet height="90%" width="100%" color="transparent">
+    <!-- Medi Truth logo/ Title-->
+    <v-img
+      class="mx-auto"
+      height="120px"
+      width="250px"
+      contain
+      aspect-ratio="16/9"
+      src="http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s"
+    ></v-img>
+    <!-- Info Section-->
+    <p class="text-h4">Make your claim, we'll rebuttle.</p>
+
+    <!-- Disclaimer headings-->
+    <v-sheet class="d-flex flex-row mt-15 justify-center" color="transparent">
+      <template v-for="disclaimer in disclaimers">
+        <v-card
+          flat
+          height="400"
+          width="200"
+          class="mx-4"
+          :title="disclaimer.section"
+          color="transparent"
+        >
+          <div class="d-flex flex-column">
+            <template v-for="example in disclaimer.examples">
+              <v-card class="mb-2" variant="tonal" :text="example.one"></v-card>
+              <v-card variant="tonal" :text="example.two"></v-card>
+              <v-card variant="tonal" :text="example.three"></v-card>
+            </template>
+          </div>
+        </v-card>
+      </template>
+    </v-sheet>
   </v-sheet>
-  {% endif %} {% endwith %}
+  {% else %}
+  <v-sheet height="90%" width="100%" color="transparent">
+    <v-sheet class="text-left justify-left" color="transparent">
+      {% for category, message in messages %}
+      <v-list id="flashes" color="red" style="background: none">
+        <v-list-item
+          v-if="{{loop.index}} == 1"
+          class="text-h3"
+          style="color: white"
+          >{{ message }}</v-list-item
+        >
+        <v-list-item
+          v-if="{{loop.index}} == 2"
+          color="white"
+          style="color: #b6b6b6"
+          class="text-h6"
+          >{{ message }}</v-list-item
+        >
+      </v-list>
+      {% endfor %}
+    </v-sheet>
+    <!-- Filter results -->
+    <v-sheet class="d-flex flex-row ml-2 mb-5" color="transparent">
+      <v-chip-group mandatory v-model="display">
+        <v-chip class="mr-2" prepend-icon="mdi-school"> Scholarly </v-chip>
+        <v-chip class="mr-2" prepend-icon="mdi-newspaper"> News </v-chip>
+        <v-chip class="mr-2" prepend-icon="mdi-account-group">
+          Users Searches</v-chip
+        >
+      </v-chip-group>
+    </v-sheet>
+    {% endif %} {% endwith %} {% if not scholar %} {% else %}
+    <!-- Display Articles if claim was submitted-->
+    <div v-if="display === 0">
+      <p class="text-h5 text-left">Scholarly Articles</p>
+      <!-- Carousel for articles-->
+      <v-window v-model="window" show-arrows continuous>
+        <template v-slot:prev="{ props }">
+          <v-btn @click="props.onClick" icon="mdi-chevron-left" variant="plain">
+          </v-btn>
+        </template>
+        <template v-slot:next="{ props }">
+          <v-btn
+            @click="props.onClick"
+            icon="mdi-chevron-right"
+            variant="plain"
+            selected-class="select"
+          >
+          </v-btn>
+        </template>
 
-  <!-- If no article was submitted Display -->
-{% if not scholar %} {% else %}
-<h3 class="text-left">Scholar Articles</h3>
-<!-- Display Articles if claim was submitted-->
-<v-window v-model="window" show-arrows continuous>
-  {% for article in scholar %}
-  <v-window-item v-for="(n, index)" :key="index">
-    <v-card flat class="d=flex justify-center" color="transparent">
-      <v-card
-        width="85%"
-        height="200px"
-        class="text-left my-5 mx-auto"
-        variant="tonal"
-        flat
-        width="block"
-        title="{{article.title}}"
-        subtitle="Author: {{article.author}} Year: {{article.publishedAt}}"
-        text="{{article.content}}"
-      >
-        <v-card-actions>
-          <v-btn variant="text" href="{{article.url}}"> Learn More </v-btn>
-        </v-card-actions></v-card
-      >
-    </v-card>
-  </v-window-item>
-  {% endfor %} {% endif %}
-</v-window>
-
-  <!-- If no article was submitted Display -->
-  {% if not news %} {% else %}
-  <!-- Display Articles if claim was submitted-->
-  <h3 class="text-left">News Articles</h3>
-  <v-window v-model="window" show-arrows continuous>
-    {% for article in news %}
-    <v-window-item v-for="(n, index)" :key="index">
-      <v-card flat class="d=flex justify-center" color="transparent">
-        <v-card
-          width="85%"
-          height="200px"
-          class="text-left my-5 mx-auto"
-          variant="tonal"
-          flat
-          width="block"
-          title="{{article.title}}"
-          subtitle="{{article.source.name}}"
-          text="{{article.description}}"
-        >
-          <v-card-actions>
-            <v-btn variant="text" href="{{article.url}}"> Learn More </v-btn>
-          </v-card-actions></v-card
-        >
-      </v-card>
-    </v-window-item>
-    {% endfor %} {% endif %}
-  </v-window>
-  <!--Display no similar claims-->
-  {% if not similar_claims %} {% else %}
-  <!-- Display Similar claims-->
-  <h3 class="text-left">Users also searched for</h3>
-  <v-window v-model="window2" show-arrows continuous>
-    {% for claim in similar_claims %}
-    <v-window-item v-for="(n, index)" :key="index">
-      <v-card color="transparent" width="85%" class="mx-auto">
-        <v-sheet color="transparent" class="text-left">
-          <div class="text=h6">{{claim.text}}</div>
-          <div>{{claim.claimant}}</div>
-        </v-sheet>
-        {% for claim in claim.claimReview %}
-        <v-card
-          class="text-left my-5"
-          flat
-          variant="tonal"
-          width="block"
-          title="{{claim.publisher.name}}"
-          subtitle="{{claim.textualRating}}"
-        >
-          <v-card-actions>
-            <v-btn variant="text" href="{{claim.url}}"> Learn More </v-btn>
-          </v-card-actions></v-card
-        >
-      </v-card>
-    </v-window-item>
-    {% endfor %} {% endfor %} {% endif %}
-  </v-window>
+        {% for article in scholar %}
+        <v-window-item v-for="(n, index)" :key="index">
+          <v-card flat class="d=flex justify-center" color="transparent">
+            <v-card
+              width="85%"
+              class="text-left my-5 mx-auto"
+              variant="tonal"
+              flat
+              width="block"
+              title="{{article.title}}"
+              subtitle="Author: {{article.author}} Year: {{article.publishedAt}}"
+              text="{{article.content}}"
+            >
+              <v-card-actions>
+                <v-btn variant="text" href="{{article.url}}" target="_blank">
+                  Learn More
+                </v-btn>
+              </v-card-actions></v-card
+            >
+          </v-card>
+        </v-window-item>
+        {% endfor %}
+      </v-window>
+    </div>
+    {% endif %}
+    <!-- If no article was submitted Display -->
+    {% if not news %} {% else %}
+    <div v-if="display === 1">
+      <!-- Display Articles if claim was submitted-->
+      <h3 class="text-left">News Articles</h3>
+      <v-window v-model="window" show-arrows continuous>
+        {% for article in news %}
+        <v-window-item v-for="(n, index)" :key="index">
+          <v-card flat class="d=flex justify-center" color="transparent">
+            <v-card
+              width="85%"
+              height="200px"
+              class="text-left my-5 mx-auto"
+              variant="tonal"
+              flat
+              width="block"
+              title="{{article.title}}"
+              subtitle="{{article.source.name}}"
+              text="{{article.description}}"
+            >
+              <v-card-actions>
+                <v-btn variant="text" href="{{article.url}}" target="_blank">
+                  Learn More
+                </v-btn>
+              </v-card-actions></v-card
+            >
+          </v-card>
+        </v-window-item>
+        {% endfor %}
+      </v-window>
+    </div>
+    {% endif %} {% if not similar_claims %} {% else %}
+    <!-- Display Similar claims-->
+    <div v-if="display === 2">
+      <h3 class="text-left">Users also searched for</h3>
+      <v-window v-model="window2" show-arrows continuous>
+        {% for claim in similar_claims %}
+        <v-window-item v-for="(n, index)" :key="index">
+          <v-card color="transparent" width="85%" class="mx-auto">
+            <v-sheet color="transparent" class="text-left">
+              <div class="text=h6">{{claim.text}}</div>
+              <div>{{claim.claimant}}</div>
+            </v-sheet>
+            {% for claim in claim.claimReview %}
+            <v-card
+              class="text-left my-5"
+              flat
+              variant="tonal"
+              width="block"
+              title="{{claim.publisher.name}}"
+              subtitle="{{claim.textualRating}}"
+            >
+              <v-card-actions>
+                <v-btn variant="text" href="{{claim.url}}" target="_blank">
+                  Learn More
+                </v-btn>
+              </v-card-actions></v-card
+            >
+          </v-card>
+        </v-window-item>
+        {% endfor %} {% endfor %}
+      </v-window>
+    </div>
+  </v-sheet>
+  {% endif %}
   <!-- FORM -->
-  <form
-    class="col s12 m8 offset-m2"
+  <v-form
     v-on:change="saveFormDataState"
     method="POST"
+    v-model="isFormValid"
     action="/checkclaim"
   >
     <v-sheet class="d-flex mx-auto" color="transparent" width="100%">
@@ -138,10 +201,29 @@
         density="compact"
         variant="outlined"
         :value="message"
+        :rules="[rules.required, rules.counter]"
         class="pr-2"
+        clearable
       ></v-text-field>
-      <v-btn type="submit" icon="mdi-send" color="transparent" flat></v-btn>
+      <v-btn
+        class="btn"
+        icon="mdi-send"
+        color="transparent"
+        type="submit"
+        variant="flat"
+        @click="startLoader"
+        :disabled="isFormValid == false"
+      ></v-btn>
     </v-sheet>
-  </form>
+  </v-form>
+  <!-- Loading -->
+  <v-dialog v-model="dialog" :scrim="false" persistent width="auto">
+    <v-progress-circular
+      indeterminate
+      :size="40"
+      :width="4"
+      color="white"
+    ></v-progress-circular>
+  </v-dialog>
 </v-sheet>
 {% endblock %}

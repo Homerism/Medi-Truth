@@ -29,6 +29,27 @@
       @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
       body{
         font-family: 'Lato', sans-serif;
+      }   
+      .btnSelected{
+        background-color:none;
+        color: transparent;
+      }
+      .infocard *{
+        opacity: 0.7;
+        transition: 0.3s;
+      }
+      .infocard:hover *{
+        opacity: 1;
+      }
+      .member *{
+      opacity: 0.5;
+      transition: 0.3s; 
+      }
+      .member:hover *{
+      opacity: 1;
+      }
+      .select{
+        bacground-color: blue;
       }
       </style>
     <!--Let browser know website is optimized for mobile-->
@@ -65,10 +86,11 @@
                           </v-btn>
                         </div>
                       </template>
+                      <p id="true">  dsad</p>
                     </v-navigation-drawer>  
               <!-- Main Content, Right of Navigation Drawer -->
                     <v-main style="background-color: #191A1D; color: white">
-                      <div class="container d-flex justify-center flex-coloumn text-center" id="content" style="width:100%;height:100%">{% block content %}{% endblock %}</div>
+                      <div class="container d-flex justify-center flex-coloumn text-center" id="content" style="width:100%;height:100%; max-height:100%; overflow: hidden">{% block content %}{% endblock %}</div>
                     </v-main>
                   </v-layout>
  
@@ -91,26 +113,50 @@
 
       data() {
         return {
-          message: 'Hello Vue!',
           navs: ([{title: 'Home', icon: 'mdi-home', link: '/'},
                   {title: 'Check Claim', icon: 'mdi-plus', link: '/checkclaim'},
                   {title: 'About Us', icon: 'mdi-paperclip', link: '/about'},
                   {title: 'Signup', icon: 'mdi-account-outline', link: '/usersignup'},
                   {title: 'Login', icon: 'mdi-folder', link: '/login'},]),
 
-          guides: ([{title: 'Submit a Query', subtitle:'Click on new claim and hit enter', icon: '' },
-          {title: 'Symptom Checker', subtitle: 'Check what illness has these symptoms', icon: '' },
-          {title: 'Recents', subtitle: 'Log in and keep tabs on your searches', icon: '' }
+          guides: ([{title: 'Submit a Query', subtitle:'Click on new claim and hit enter', icon: 'mdi-magnify' },
+          {title: 'Symptom Checker', subtitle: 'Check what illness has these symptoms', icon: 'mdi-needle' },
+          {title: 'Recents', subtitle: 'Log in and keep tabs on your searches', icon: 'mdi-history' }
           ]),
 
           members: ([{name:'Kareem Williams',role:'Front-End',image:'http://drive.google.com/uc?export=view&id=1RMhwRB3X1A1AEpdcN96ZJfY061fB1q9-', text: 'Dedicated to Front-End responsibilities and UI/UX and design considerations'},
                   {name:'Jahmel Homer',role:'Back-End/ Project Lead',image:'http://drive.google.com/uc?export=view&id=1eyW8vgWL7RPnMLFbcmqijZejSvjK6G6M', text: 'Ensured the project went smoothly with respectable and efficient instruction while vetting and working on the services algorithm and controllers '},
                   {name:'Keon Khelawan',role:'Back-End',image:'http://drive.google.com/uc?export=view&id=1CJrsAXHTUyRGMbHiTop7gsx4DgYSRyzS', text: 'Assisted in Python programming, dealing with the algorithm as well, views and User login'}
                   ]),
+
+          // claim check disclaimers logged out users
+          disclaimers: ([{section: 'Examples', examples:[{one: '"Is Covid real? "'},{two:'"Is ginger a viable health solution"'},{three: '"Is a fever lethal"'}]},
+          {section: 'Capabilities', examples:[{one: 'Remembers user input in the search bar'},{two:'Responds with a collection of articles for the user to persue'},{three: 'See what users also searched'}]},
+          {section: 'Limitations', examples:[{one: 'May occasionally produces incorrect information'},{two:'May occationally produce harmful or offensive information '},{three: 'Limit information to 2022'}]}
           
+          ]),
+          
+          // Check claim result output carousels; window -> the articles window2 -> related user seearches 
           window: 0,
           window2: 0,
+          //claim variable
           message: null,
+          //calim check filter binding
+          display: 0,
+          //input rules 
+          rules: {
+            required: value => !!value || 'Required.',
+            counter: value => value.length <= 50 || 'Max 50 characters',
+          },
+          //boolean for whether or not form is valid
+          isFormValid: false,
+          isFormValidSignUp: false,
+          isFormValidLogin: false,
+          //loader boolean 
+          dialog: false,
+          //sign up page tracker
+          step: 0,
+
                 }
       },
       methods:{
@@ -127,11 +173,25 @@
       saveFormDataState(){
         const claim = JSON.stringify(this.message);
         sessionStorage.setItem('claim', claim);
+      },
+      startLoader(){
+        this.dialog = true;
       }
     },
-    //triggers retrieval method on template render
+    //triggers retrieval method on template render and monitors loaders
     created(){
       this.initFormDataState();
+    },
+    watch:{
+      isFormValid(value) {
+        this.isFormValid = value;
+    },
+    isFormValidSignUp(value) {
+  },
+    dialog(val) {
+      if (val == true) return
+      this.dialog = false
+    },
     }
 
     })
