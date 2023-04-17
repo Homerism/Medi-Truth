@@ -5,20 +5,27 @@
     font-family: "Space Mono", monospace;
   }
 </style>
-<main class="container">
-  <h2>Claim History</h2>
+<v-sheet
+  class="cointaner"
+  color="transparent"
+  class="d-flex flex-column mt-15"
+  width="100%"
+  height="100%"
+>
+  <p class="text-h3 mb-2"> <v-icon icon="mdi-history" size="50" /> Claim History</p>
 
   {% if user.queries or results %}
-  <div class="mb-5">
+  <div class="mb-10">
     <p>
       Filter by:
-      <v-chip><a href="/filter/{{1}}">Credible</a></v-chip>
-      <v-chip><a href="/filter/{{0}}">Untrustworthy</a></v-chip>
+      <v-chip class="mx-1"><a href="/filter/{{1}}">Credible</a></v-chip>
+      <v-chip class="mx-1"><a href="/filter/{{0}}">Untrustworthy</a></v-chip>
     </p>
   </div>
   {% else %}
   <div></div>
   {% endif %} {% if not results %} {% for query in user.queries %}
+  <v-sheet  color="transparent" height="70%" width="100%" style="overflow-y: scroll">
   <v-card width="600" class="mx-auto text-left pb-3 my-5" variant="tonal">
     <template v-slot:title> {{ query.query_text }} </template>
 
@@ -35,8 +42,7 @@
     </form>
         <form action="/remove" method="post">
           <input type="hidden" name="removal" value="{{query.id}}" />
-          <v-btn variant="tonal" type="submit">
-        Remove Query
+          <v-btn variant="tonal" icon="mdi-trash-can" color="red" size="small" type="submit">
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -63,7 +69,7 @@
       </v-btn>
     </v-card-actions>
   </v-card>
-
   {% endfor %} {% endif %}
-</main>
+</v-sheet>
+</v-sheet>
 {% endblock %}

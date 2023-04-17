@@ -8,38 +8,61 @@ conditions %}
   width="100%"
   height="100%"
 >
-  <h1>Symptom Checker</h1>
+  <v-sheet class="mx-auto" height="50" width="50" color="transparent">
+    <v-img
+      class="mb-4"
+      contain
+      height="100x"
+      width="100px"
+      src="http://drive.google.com/uc?export=view&id=1qd_yEs18ZhbWPATQbcgNEtCQOWDMWXf2"
+    ></v-img>
+  </v-sheet>
+  <p class="text-h3">Symptom Checker</p>
   <form action="/symptoms" method="POST">
-    <label for="symptoms" class="text-subtitle-2"
+    <label for="symptoms" class="text-subtitle-2 mt-1"
       >Please enter your symptoms (separated by commas) e.g fever,headache,back
-      pain:</label
-    ><br />
+      pain:</label>
+
+      <v-sheet color="transparent" class="mx-auto">
+      <v-card width="400" class="mx-auto text-left mt-6" variant="tonal" color="orange" title="Disclaimer" subtitle="warning" text="Results shown are only meant to reaffirm. Talk to your physician for professional medical advice" prepend-icon="mdi-alert">
+      </v-card>
+    </v-sheet>
+
+      <br />
+    <v-sheet class="d-flex mx-auto" color="transparent" width="70%">
     <v-text-field
       name="symptoms"
+      closable
       id="symptoms"
       type="input"
+      :rules="[rules.required]"
       density="compact"
       variant="outlined"
-      class="pr-2 my-5"
+      class="my-2"
+      placeholder="Symptoms"
     ></v-text-field>
-    <input type="submit" value="Submit" />
+    </v-sheet>
+    <v-btn type="submit" variant="tonal" value="Submit"> Submit </v-btn>
   </form>
 
   {% else %}
-  <div class="d-flex flex-column">
-    <h1>Possible conditions based on your symptoms:</h1>
+  <div class="d-flex flex-column mt-15 mb-5">
+    <p class="text-h3">Possible conditions based on your symptoms:</p>
     {% if conditions %}
-    <ul>
-      <li>
-        Based on your symptoms, you may have one of the following conditions:
-      </li>
+
+    <label for="symptoms" class="text-subtitle-2 mt-2 mb-5">
+      Based on your symptoms, you may have one of the following conditions:
+    </label>
+    </v-sheet>
+    <v-sheet color="transparent" flat class="d-flex flex-column mx-auto">
       {% for condition in conditions %}
-      <li>{{ condition }}</li>
+      <v-card variant="tonal" color="orange" class="mb-2 mt-2"  width="100">{{ condition }}</v-card>
       {% endfor %}
-      <li><a href="/symptoms">Check Symptom Again</a></li>
-    </ul>
-    {% else %}
-    <p>Sorry, we could not find any possible conditions for your symptoms.</p>
+    </v-sheet>
+    <v-sheet width="300" class="mx-auto mt-15" flat color="transparent">
+    <v-btn href="/symptoms" variant="tonal" prepend-icon="mdi-arrow-left"> Check again</v-btn>
+    </v-sheet>
+
     {% endif %} {% endif %}
   </div>
 </v-sheet>

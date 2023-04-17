@@ -67,7 +67,7 @@
                     </v-navigation-drawer>
       <!-- Main Content, Right of Navigation Drawer -->
                     <v-main style="background-color: #191A1D; color: white">
-                      <div class="container d-flex justify-center flex-coloumn text-center" id="content">{% block content %}{% endblock %}</div>
+                      <div class="container d-flex justify-center flex-coloumn text-center" id="content" style="width:100%;height:100%; max-height:100%; overflow: hidden">{% block content %}{% endblock %}</div>
                     </v-main>
                   </v-layout>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js">
@@ -84,19 +84,103 @@
 
       data() {
         return {
-          message: "Hello Vue!",
           navs: [
             { title: "Home", icon: "mdi-home", link: "/query" },
-            { title: "My Queries", icon: "mdi-paperclip", link: "/queries" },
-            { title: "ChatBot", icon: "mdi-plus", link: "/chatbot" },
             { title: "Check Symptom", icon: "mdi-needle", link: "/symptoms" },
             {
-              title: "Logout",
-              icon: "mdi-clipboard-outline",
-              link: "/logout",
+              title: "ChatBot",
+              icon: "mdi-robot",
+              link: "/chatbot",
+            },
+            { title: "My Queries", icon: "mdi-history", link: "/queries" },
+            { title: "Logout", icon: "mdi-door-open", link: "/logout" },
+          ],
+          // claim check disclaimers logged out users
+          disclaimers: [
+            {
+              section: "Examples",
+              examples: [
+                { one: '"Is Covid real? "' },
+                { two: '"Is ginger a viable health solution"' },
+                { three: '"Is a fever lethal"' },
+              ],
+            },
+            {
+              section: "Capabilities",
+              examples: [
+                { one: "Remembers user input in the search bar" },
+                {
+                  two: "Responds with a collection of articles for the user to persue",
+                },
+                { three: "See what users also searched" },
+              ],
+            },
+            {
+              section: "Limitations",
+              examples: [
+                { one: "May occasionally produces incorrect information" },
+                {
+                  two: "May occationally produce harmful or offensive information ",
+                },
+                { three: "Limit information to 2022" },
+              ],
             },
           ],
+
+          // Check claim result output carousels; window -> the articles window2 -> related user seearches
+          window: 0,
+          window2: 0,
+          //claim variable
+          message: null,
+          //calim check filter binding
+          display: 0,
+          //input rules
+          rules: {
+            required: (value) => !!value || "Required.",
+            counter: (value) => value.length <= 50 || "Max 50 characters",
+          },
+          //boolean for whether or not form is valid
+          isFormValid: false,
+          isFormValidSignUp: false,
+          isFormValidLogin: false,
+          //loader boolean
+          dialog: false,
+          //sign up page tracker
+          step: 0,
         };
+      },
+      methods: {
+        //retrieves form data from previous search stored in session and applies it to input binding
+        initFormDataState() {
+          if (sessionStorage.getItem("claim") != null) {
+            const claim = JSON.parse(sessionStorage.getItem("claim") || "");
+            if (claim) {
+              this.message = claim;
+            }
+          }
+        },
+        //saves from data from proceeding search in session
+        saveFormDataState() {
+          const claim = JSON.stringify(this.message);
+          sessionStorage.setItem("claim", claim);
+        },
+        startLoader() {
+          this.dialog = true;
+        },
+      },
+      //triggers retrieval method on template render and monitors loaders
+      created() {
+        this.initFormDataState();
+      },
+      watch: {
+        isFormValid(value) {
+          this.isFormValid = value;
+        },
+        isFormValidSignUp(value) {},
+        dialog(val) {
+          if (val == true) return;
+          this.dialog = false;
+        },
       },
     })
       .use(vuetify)
