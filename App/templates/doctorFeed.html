@@ -7,40 +7,45 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
   width="100%"
   height="100%"
 >
-  <h1>Doctor Feed</h1>
+  <p class="text-h3">Doctor Feed</p>
   <form action="/feed" method="post">
+    <v-sheet flat color="transparent" class="d-flex flex-row mx-auto justify-center"> 
     <v-text-field
       name="keyword"
       id="user_input"
       type="input"
       density="compact"
       variant="outlined"
-      class="pr-2"
+      class="pr-2 mt-2"
       placeholder="article keywords"
     ></v-text-field>
-    <v-btn variant="tonal" class="mb-5" type="submit" value="Search Articles">
-      Search Articles
+    <v-btn variant="flat" 
+    class="mb-5 mr-5 mt-2" 
+    type="submit" 
+    value="Search Articles" 
+    icon="mdi-send"
+    color="transparent"
+    >
     </v-btn>
+  </v-sheet>
+     <v-btn href="/rankedfeed"  variant="tonal" value="View Ranked Articles">View all ranked articles</a>
   </form>
-  <p>
-    View Ranked Articles: <a href="/rankedfeed">View all ranked articles</a>
-  </p>
+
   {% for eachArticle in articles %}
   <v-card
     width="100%"
-    height="430"
     class="mx-auto text-left pb-3 my-5"
     variant="tonal"
   >
     <template v-slot:title>
       <div class="d-flex flex-column">
+        <v-sheet class="mb-5 d-flex justify-center" flat color="transparent">
         <img
           src="{{ eachArticle.img }}"
           alt="no image"
-          width="200"
-          height="200"
+          style="z-index:1"
         />
-
+        </v-sheet>
         <p class="text-h4">{{ eachArticle.title }}</p>
       </div>
     </template>
@@ -53,14 +58,12 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
     <template v-slot:text> {{ eachArticle.content }} </template>
 
     <v-card-actions class="d-flex my-auto align-end">
-      <v-btn variant="tonal" class="mx-2" href="{{ eachArticle.url }}">
+      <v-btn variant="tonal" color="green" icon="mdi-thumb-up" class="mx-2" href="/like/{{ eachArticle.id }}">
+      </v-btn>
+      <v-btn variant="tonal" color="red" icon="mdi-thumb-down" class="mx-2" href="/dislike/{{ eachArticle.id }}">
+      </v-btn>
+      <v-btn variant="tonal" class="mx-2" href="{{ eachArticle.url }}" target="_blank">
         Read More
-      </v-btn>
-      <v-btn variant="tonal" class="mx-2" href="/like/{{ eachArticle.id }}">
-        Approve
-      </v-btn>
-      <v-btn variant="tonal" class="mx-2" href="/dislike/{{ eachArticle.id }}">
-        Disapprove
       </v-btn>
     </v-card-actions>
   </v-card>

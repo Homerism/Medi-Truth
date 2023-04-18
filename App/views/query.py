@@ -1,10 +1,3 @@
-from flask import Blueprint,render_template, request, flash
-from flask_login import login_required, current_user 
-from App.models import Query, ArticleRate
-from App.database import db
-
-query_views = Blueprint('query_views', __name__, template_folder='../templates')
-
 from App.controllers import (
     health_classification,
     add_query,
@@ -22,11 +15,20 @@ from App.controllers import (
     query_check,
     scholar_articles
 )
+from flask import Blueprint, render_template, request, flash
+from flask_login import login_required, current_user
+from App.models import Query, ArticleRate
+from App.database import db
+
+query_views = Blueprint('query_views', __name__,
+                        template_folder='../templates')
+
 
 @query_views.route('/query', methods=['GET'])
 @login_required
 def index_page():
     return render_template('profile.html')
+
 
 @query_views.route('/query', methods=['POST'])
 def queryAction():
@@ -61,6 +63,7 @@ def queryAction():
         flash(f"  {response}")
     return render_template('profile.html', news=news, scholar=scholar, similar_claims=similar_claims, get_article_id=get_article_id, calculate_rating=calculate_rating, str=str, int=int)
 
+
 @query_views.route('/queries', methods=['GET'])
 @login_required
 def queries_page():
@@ -68,20 +71,24 @@ def queries_page():
     curr_user = get_user(curr_user_id)
     return render_template('queries.html', user=curr_user)
 
+
 @query_views.route('/filter/<int:id>')
 @login_required
 def filter(id):
     curr_user_id = current_user.id
     curr_user = get_user(curr_user_id)
-    verdict =""
+    verdict = ""
+    prompt = ""
     if id == 1:
         verdict = "This Claim Is Most Likely Credible."
     else:
         verdict = "This Claim Is Most Likely NOT Credible."
-    results = Query.query.filter_by(user_id=curr_user_id, verdict=verdict).all()
+    results = Query.query.filter_by(
+        user_id=curr_user_id, verdict=verdict).all()
     if not results:
-        flash(f"None Found.")
-    return render_template('queries.html', user=curr_user, results=results)
+        prompt = "No filtered claims found"
+    return render_template('queries.html', user=curr_user, results=results, prompt=prompt)
+
 
 @query_views.route('/remove', methods=['POST'])
 @login_required
@@ -89,13 +96,15 @@ def queries_page_remove():
     curr_user_id = current_user.id
     curr_user = get_user(curr_user_id)
     queryId = request.form['removal']
+    prompt = "You have successfully removed this query"
+    button = "back"
     remove_query(queryId)
-    flash(f"Your query was successfully removed")    
-    return render_template('queries.html', user=curr_user)
+    return render_template('queries.html', user=curr_user, prompt=prompt, button=button)
+
 
 @query_views.route('/details', methods=['POST'])
 @login_required
 def details_page():
     queryId = request.form['details']
     curr_query = Query.query.get(queryId)
-    return render_template('details.html', details=curr_query,get_article_id=get_article_id, calculate_rating=calculate_rating,str=str)
+    return render_template('details.html', details=curr_query, get_article_id=get_article_id, calculate_rating=calculate_rating, str=str)

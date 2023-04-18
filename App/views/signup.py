@@ -39,19 +39,20 @@ def DoctorSignupIndex():
 
 @signup_views.route('/doctorsignup', methods=['POST'])
 def DoctorSignupAction():
-    form = DoctorSignUp()
+    username = request.form.get("username")
+    password = request.form.get("password")
+    npi = request.form.get("npi")
     error = ""
-    if form.validate:
-        real_npi = check_npi(form.npi.data)
-        if not real_npi:
-            error = "This is an invalid NPI number"
-            return render_template('doctorsignup.html', form=form, error=error)
 
-        npi = get_npi_number(form.npi.data)
-        if not npi:
-            error = "This is an invalid NPI number"
-            return render_template('doctorsignup.html', form=form, error=error)
+    real_npi = check_npi(npi)
+    if not real_npi:
+        error = "This is an invalid NPI number"
+        return render_template('doctorsignup.html', error=error)
 
-        create_user(form.username.data, 'Doctor', form.password.data)
-        flash(f"User {form.username.data} created!")
-        return redirect(url_for('login_views.loginIndex'))
+    npi_referral = get_npi_number(npi)
+    if not npi_referral:
+        error = "This is an invalid NPI number"
+        return render_template('doctorsignup.html', error=error)
+
+    create_user(username, 'Doctor', password)
+    return redirect(url_for('login_views.loginIndex'))

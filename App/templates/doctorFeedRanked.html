@@ -7,31 +7,21 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
   width="100%"
   height="100%"
 >
-  <h1>Ranked Articles</h1>
+  <p class="text-h3">Ranked Articles</p>
   {% if articles or results %}
-  <p>
+  <p class="mt-2">
     Filter by:
-    <v-chip><a href="/rankedfeed/{{1}}">Approved</a></v-chip>
+    <v-chip class="mx-2"><a href="/rankedfeed/{{1}}">Approved</a></v-chip>
     <v-chip><a href="/rankedfeed/{{0}}">Disapproved</a></v-chip>
+    <v-chip><a href="/rankedfeed">All</a></v-chip>
   </p>
-  {% else %}
-  <div></div>
-  {% endif %} {% if not results %} {% for eachArticle in articles %}
-  <v-card
-    width="100%"
-    height="430"
-    class="mx-auto text-left pb-3 my-5"
-    variant="tonal"
-  >
+  {% else %} {% endif %} {% if not results %} {% for eachArticle in articles %}
+  <v-card width="100%" class="mx-auto text-left pb-3 my-5" variant="tonal">
     <template v-slot:title>
       <div class="d-flex flex-column">
-        <img
-          src="{{ eachArticle.img }}"
-          alt="no image"
-          width="200"
-          height="200"
-        />
-
+        <v-sheet class="mb-5 d-flex justify-center" flat color="transparent">
+          <img src="{{ eachArticle.img }}" alt="no image" style="z-index: 1" />
+        </v-sheet>
         <p class="text-h4">{{ eachArticle.title }}</p>
       </div>
     </template>
@@ -44,41 +34,39 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
     <template v-slot:text> {{ eachArticle.content }} </template>
 
     <v-card-actions class="d-flex my-auto align-end">
-      <v-btn variant="tonal" class="mx-2" href="{{ eachArticle.url }}">
-        Read More
-      </v-btn>
       <v-btn
         variant="tonal"
+        color="green"
+        icon="mdi-thumb-up"
         class="mx-2"
         href="/rankedfeed/approved/{{ eachArticle.id }}"
       >
-        Approve
+      </v-btn>
+      <v-btn
+        variant="tonal"
+        color="red"
+        icon="mdi-thumb-down"
+        class="mx-2"
+        href="/rankedfeed/disapproved/{{ eachArticle.id }}"
+      >
       </v-btn>
       <v-btn
         variant="tonal"
         class="mx-2"
-        href="/rankedfeed/disapproved/{{ eachArticle.id }}"
+        href="{{ eachArticle.url }}"
+        target="_blank"
       >
-        Disapprove
+        Read More
       </v-btn>
     </v-card-actions>
   </v-card>
   {% endfor %} {% else %} {% for eachArticle in results %}
-  <v-card
-    width="100%"
-    height="430"
-    class="mx-auto text-left pb-3 my-5"
-    variant="tonal"
-  >
+  <v-card width="100%" class="mx-auto text-left pb-3 my-5" variant="tonal">
     <template v-slot:title>
       <div class="d-flex flex-column">
-        <img
-          src="{{ eachArticle.img }}"
-          alt="no image"
-          width="200"
-          height="200"
-        />
-
+        <v-sheet class="mb-5 d-flex justify-center" flat color="transparent">
+          <img src="{{ eachArticle.img }}" alt="no image" style="z-index: 1" />
+        </v-sheet>
         <p class="text-h4">{{ eachArticle.title }}</p>
       </div>
     </template>
@@ -91,22 +79,29 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
     <template v-slot:text> {{ eachArticle.content }} </template>
 
     <v-card-actions class="d-flex my-auto align-end">
-      <v-btn variant="tonal" class="mx-2" href="{{ eachArticle.url }}">
-        Read More
-      </v-btn>
       <v-btn
         variant="tonal"
+        color="green"
+        icon="mdi-thumb-up"
         class="mx-2"
         href="/rankedfeed/approved/{{ eachArticle.id }}"
       >
-        Approve
+      </v-btn>
+      <v-btn
+        variant="tonal"
+        color="red"
+        icon="mdi-thumb-down"
+        class="mx-2"
+        href="/rankedfeed/disapproved/{{ eachArticle.id }}"
+      >
       </v-btn>
       <v-btn
         variant="tonal"
         class="mx-2"
-        href="/rankedfeed/disapproved/{{ eachArticle.id }}"
+        href="{{ eachArticle.url }}"
+        target="_blank"
       >
-        Disapprove
+        Read More
       </v-btn>
     </v-card-actions>
   </v-card>

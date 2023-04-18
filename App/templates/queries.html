@@ -13,7 +13,6 @@
   height="100%"
 >
   <p class="text-h3 mb-2"> <v-icon icon="mdi-history" size="50" /> Claim History</p>
-
   {% if user.queries or results %}
   <div class="mb-10">
     <p>
@@ -22,10 +21,22 @@
       <v-chip class="mx-1"><a href="/filter/{{0}}">Untrustworthy</a></v-chip>
     </p>
   </div>
+  {% if prompt %}
+  <p>
+  <v-chip prepend-icon="mdi-redo" class="text-subtitle-2"> {{prompt}}</v-chip>
+  </p>
+  {% endif %}
   {% else %}
-  <div></div>
-  {% endif %} {% if not results %} {% for query in user.queries %}
-  <v-sheet  color="transparent" height="70%" width="100%" style="overflow-y: scroll">
+  {% if prompt %}
+  <p>
+  <v-chip prepend-icon="mdi-redo" class="text-subtitle-2"> {{prompt}}</v-chip>
+  </p>
+  {% else %}
+  <p> No new claims have been made </p>
+  {% endif %}
+  {% endif %}
+  <v-sheet  color="transparent" height="70%" width="100%">
+     {% if not results %} {% for query in user.queries %}
   <v-card width="600" class="mx-auto text-left pb-3 my-5" variant="tonal">
     <template v-slot:title> {{ query.query_text }} </template>
 
@@ -64,12 +75,12 @@
     </form>
         <form action="/remove" method="post">
           <input type="hidden" name="removal" value="{{result.id}}" />
-          <v-btn variant="tonal" type="submit">
-        Remove Query
+          <v-btn variant="tonal" icon="mdi-trash-can" color="red" size="small" type="submit">
       </v-btn>
     </v-card-actions>
   </v-card>
-  {% endfor %} {% endif %}
+  {% endfor %}
+  {% endif %}
 </v-sheet>
 </v-sheet>
 {% endblock %}

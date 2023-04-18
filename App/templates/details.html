@@ -1,23 +1,45 @@
-{% extends "login-layout.html" %}
-{% block title %}Health Misinformation{% endblock %}
-{% block page %}HMA{% endblock %}
-{{ super() }}
-{% block content %}
-    <h2>Query Details</h2>
-    {% for each in details.articles %}
-        <div>
-            <ul>
-                <li><img src="{{ each.img }}" alt="no image" width="200" height="200"></li>
-                <li><b style="font-size:25px"> {{ each.title }} </b></li>
-                <li> {{ each.content }} </li>
-                <li style="font-size:13px"><b >Author(s):</b> {{ each.author }} </li>
-                <li style="font-size:13px"><b >publish date: </b> {{ each.publish }} </li>
-                <li><a href="{{ each.url }}">visit page</a></li>
-                {% set title = str(each.title) %}
-                {% set id = get_article_id(title) %}
-                <div><b>Article Approval Rating by certified Medical Practtioners: {{ calculate_rating(id) }} %</b></div>
-                <hr>
-            </ul>
-        </div>
-    {% endfor %} 
+{% extends "login-layout.html" %} {% block title %}Health Misinformation{%
+endblock %} {% block page %}HMA{% endblock %} {{ super() }} {% block content %}
+<v-sheet
+  class="cointaner"
+  color="transparent"
+  class="d-flex flex-column mt-10"
+  width="100%"
+  height="100%"
+>
+  <p class="text-h3">Approval Ratings</p>
+  <p class="text-subtitle-3 text-grey">See what our doctors agree with</p>
+
+  {% for each in details.articles %}
+  <v-card width="100%" class="mx-auto text-left pb-3 my-5" variant="tonal">
+    {% set title = str(each.title) %} {% set id = get_article_id(title) %}
+    <template v-slot:title>
+      <div class="d-flex flex-column">
+        <v-sheet class="mb-5 d-flex justify-center" flat color="transparent">
+          <img src="{{ each.img }}" alt="no image" style="z-index: 1" />
+        </v-sheet>
+        <p class="text-h4">{{ each.title }}</p>
+      </div>
+    </template>
+
+    <template v-slot:subtitle>
+      Author(s): {{ each.author }} Publish date: {{ each.publish }}</template
+    >
+
+    <template v-slot:text> {{ each.content }} </template>
+
+    <v-card-actions class="d-flex my-auto align-end">
+      <v-btn variant="tonal" class="mx-2" href="{{ each.url }}" target="_blank">
+        visit page
+      </v-btn>
+    </v-card-actions>
+
+    <div class="text-center">
+      <v-chip prepend-icon="mdi-thumb-up" size="x-large" color="blue"
+        >{{ calculate_rating(id) }}%</v-chip
+      >
+    </div>
+  </v-card>
+  {% endfor %}
+</v-sheet>
 {% endblock %}

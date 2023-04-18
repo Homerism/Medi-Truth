@@ -1,18 +1,45 @@
 {% extends "login-layout.html" %} {% block title %}profile page{% endblock %} {%
-    block page %}HMA{% endblock %} {{ super() }} {% block content %}
-<form method="post" action="/feedback">
-    <label for="statement">Please enter a Health/Medical Claim:</label><br>
-    <input type="text" id="statement" name="statement" required><br>
-    <label for="description">Description:</label><br>
-    <input type="text" id="description" name="description" required><br>
-    <label for="rating">Rating:</label><br>
-    <input type="radio" id="rating-true" name="rating" value="1" required>
-    <label for="rating-true">True</label>
-    <input type="radio" id="rating-false" name="rating" value="0" required>
-    <label for="rating-false">False</label><br><br>
-    <input type="submit" value="Submit">
-</form>
+block page %}HMA{% endblock %} {{ super() }} {% block content %}
+<v-sheet
+  class="cointaner"
+  color="transparent"
+  class="d-flex flex-column mt-15 justify center"
+  width="100%"
+  height="100%"
+>
+  <p class="text-h3">Contribute to the Dataset</p>
+  <label for="contribution" class="text-subtitle-2 mt-5 mb-5"
+    >Add an article you cosign and give it a rating</label
+  >
+  <form method="post" action="/feedback">
+    <v-textarea
+      auto-grow
+      rows="4"
+      id="statement"
+      name="statement"
+      label="Please enter a Health/Medical Article Title"
+      variant="outlined"
+      type="text"
+    ></v-textarea>
+    <v-textarea
+      auto-grow
+      rows="4"
+      id="description"
+      name="description"
+      label="Description"
+      variant="outlined"
+      type="text"
+    ></v-textarea>
+    <div class="text-left">
+      <p>Rating:</p>
+      <v-chip-group>
+        <v-chip id="rating-true" name="rating" value="1">True</v-chip>
+        <v-chip id="rating-false" name="rating" value="0">False</v-chip>
+      </v-chip-group>
+    </div>
+    <v-btn type="submit" variant="tonal"> Submit </v-btn>
+  </form>
 
-<p>{{ error }}</p>
+  <p>{{ error }}</p>
+</v-sheet>
 {% endblock %}
-

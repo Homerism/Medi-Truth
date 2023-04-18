@@ -52,7 +52,9 @@ page %}Login{% endblock %} {{ super() }} {% block content %}
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="black" variant="flat" type="submit"> Login </v-btn>
+            <v-btn color="black" variant="flat" type="submit" @click="ackLogin">
+              Login
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-sheet>
@@ -61,5 +63,14 @@ page %}Login{% endblock %} {{ super() }} {% block content %}
       No account as yet? <a href="/usersignup"><strong> Sign Up</strong></a>
     </pre>
   </v-sheet>
+  <!-- Successful Register Indication -->
+  <v-snackbar v-model="acc_subacktrig" :timeout="timeout">
+    Account Successfully Created
+    <template v-slot:actions>
+      <v-btn color="blue" variant="text" @click="acc_subacktrig = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </v-sheet>
 {% endblock %}

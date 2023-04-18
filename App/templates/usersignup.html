@@ -9,6 +9,7 @@ page %}Signup{% endblock %} {{ super() }} {% block content %}
 >
   <v-sheet width="60%" class="mx-auto" color="transparent">
     <v-form
+      v-on:change="saveFormDataState"
       id="myForm"
       method="POST"
       action="/usersignup"
@@ -51,16 +52,6 @@ page %}Signup{% endblock %} {{ super() }} {% block content %}
                   variant="outlined"
                   class="px-5"
                   placeholder="Password"
-                  clearable
-                  :rules="[rules.required]"
-                ></v-text-field>
-                <v-text-field
-                  name="confirm-password"
-                  type="input"
-                  density="compact"
-                  variant="outlined"
-                  class="px-5"
-                  placeholder="Confirm-Password"
                   clearable
                   :rules="[rules.required]"
                 ></v-text-field>
@@ -113,6 +104,7 @@ page %}Signup{% endblock %} {{ super() }} {% block content %}
               color="black"
               variant="flat"
               type="submit"
+              @click="accSubmit"
               :disabled="isFormValidSignUp == false"
             >
               Create
@@ -121,7 +113,6 @@ page %}Signup{% endblock %} {{ super() }} {% block content %}
         </v-card>
       </v-sheet>
     </v-form>
-
     <pre style="font: inherit" class="text-grey">
       Already have an account? <a href="/login"><strong> Log in</strong></a>
     </pre>

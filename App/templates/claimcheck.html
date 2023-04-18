@@ -18,7 +18,7 @@
       width="250px"
       contain
       aspect-ratio="16/9"
-      src="http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s"
+      :src="theme_logo"
     ></v-img>
     <!-- Info Section-->
     <p class="text-h4">Make your claim, we'll rebuttle.</p>
@@ -36,9 +36,22 @@
         >
           <div class="d-flex flex-column">
             <template v-for="example in disclaimer.examples">
-              <v-card class="mb-2" variant="tonal" :text="example.one"></v-card>
-              <v-card variant="tonal" :text="example.two"></v-card>
-              <v-card variant="tonal" :text="example.three"></v-card>
+              <v-card
+                class="mb-2"
+                variant="tonal"
+                :elevation="theme_eleveation"
+                :text="example.one"
+              ></v-card>
+              <v-card
+                variant="tonal"
+                :elevation="theme_eleveation"
+                :text="example.two"
+              ></v-card>
+              <v-card
+                variant="tonal"
+                :elevation="theme_eleveation"
+                :text="example.three"
+              ></v-card>
             </template>
           </div>
         </v-card>
@@ -49,18 +62,17 @@
   <v-sheet height="90%" width="100%" color="transparent">
     <v-sheet class="text-left justify-left" color="transparent">
       {% for category, message in messages %}
-      <v-list id="flashes" color="red" style="background: none">
+      <v-list id="flashes" style="background: none">
         <v-list-item
           v-if="{{loop.index}} == 1"
           class="text-h3"
-          style="color: white"
+          :style="theme_respStyle"
           >{{ message }}</v-list-item
         >
         <v-list-item
           v-if="{{loop.index}} == 2"
-          color="white"
-          style="color: #b6b6b6"
           class="text-h6"
+          :style="theme_respStyle"
           >{{ message }}</v-list-item
         >
       </v-list>
@@ -100,6 +112,7 @@
         <v-window-item v-for="(n, index)" :key="index">
           <v-card flat class="d=flex justify-center" color="transparent">
             <v-card
+              :elevation="theme_eleveation"
               width="85%"
               class="text-left my-5 mx-auto"
               variant="tonal"
@@ -126,11 +139,12 @@
     <div v-if="display === 1">
       <!-- Display Articles if claim was submitted-->
       <h3 class="text-left">News Articles</h3>
-      <v-window v-model="window" show-arrows continuous>
+      <v-window v-model="window3" show-arrows continuous>
         {% for article in news %}
         <v-window-item v-for="(n, index)" :key="index">
           <v-card flat class="d=flex justify-center" color="transparent">
             <v-card
+              :elevation="theme_eleveation"
               width="85%"
               height="200px"
               class="text-left my-5 mx-auto"
@@ -166,6 +180,7 @@
             </v-sheet>
             {% for claim in claim.claimReview %}
             <v-card
+              :elevation="theme_eleveation"
               class="text-left my-5"
               flat
               variant="tonal"

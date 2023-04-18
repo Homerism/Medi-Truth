@@ -64,7 +64,7 @@
                 <v-app>
                   <v-layout>
       <!-- Navigation -->              
-                    <v-navigation-drawer color="#191A1D">
+                    <v-navigation-drawer color="#191A1D" style="position:fixed !important">
               <!-- List Rendering  -->
                       <v-list density="compact" nav>
                         <v-list-item
@@ -77,19 +77,21 @@
                           </template>
                            <v-list-item-title class="text-subtitle-2 font-weight-medium" v-text="nav.title"></v-list-item-title>
                             </v-list-item>
+                            <v-list-item>
+                              <v-switch
+                              v-on:change="saveFormDataState"
+                              v-model="mode"
+                              hide-details
+                              true-value="light"
+                              false-value="dark"
+                              :label="`${mode}`"
+                              inset
+                            ></v-switch>
+                            </v-list-item>
                       </v-list>
-
-                      <template v-slot:append>
-                        <div class="pa-2">
-                          <v-btn block variant="tonal">
-                            Light Mode
-                          </v-btn>
-                        </div>
-                      </template>
-                      <p id="true">  dsad</p>
                     </v-navigation-drawer>  
               <!-- Main Content, Right of Navigation Drawer -->
-                    <v-main style="background-color: #191A1D; color: white">
+                    <v-main :style="theme_main" >
                       <div class="container d-flex justify-center flex-coloumn text-center" id="content" style="width:100%;height:100%; max-height:100%; overflow: hidden">{% block content %}{% endblock %}</div>
                     </v-main>
                   </v-layout>
@@ -115,9 +117,9 @@
         return {
           navs: ([{title: 'Home', icon: 'mdi-home', link: '/'},
                   {title: 'Check Claim', icon: 'mdi-plus', link: '/checkclaim'},
-                  {title: 'About Us', icon: 'mdi-paperclip', link: '/about'},
-                  {title: 'Signup', icon: 'mdi-account-outline', link: '/usersignup'},
-                  {title: 'Login', icon: 'mdi-folder', link: '/login'},]),
+                  {title: 'About Us', icon: 'mdi-information-outline', link: '/about'},
+                  {title: 'Signup', icon: 'mdi-account-plus', link: '/usersignup'},
+                  {title: 'Login', icon: 'mdi-doorbell', link: '/login'},]),
 
           guides: ([{title: 'Submit a Query', subtitle:'Click on new claim and hit enter', icon: 'mdi-magnify' },
           {title: 'Symptom Checker', subtitle: 'Check what illness has these symptoms', icon: 'mdi-needle' },
@@ -139,9 +141,20 @@
           // Check claim result output carousels; window -> the articles window2 -> related user seearches 
           window: 0,
           window2: 0,
+          window3: 0,
+          //TO DO WITH Signup
+          acc_submittrig: false,
+          acc_subacktrig: false,
+          timeout: 6000,
+          //TO DO WITH LIGHT AND DARK
+          mode: 'dark',
+            theme_main: 'background-color: #191A1D; color: white',
+            theme_logo: 'http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s',
+            theme_eleveation: 0,
+            theme_respStyle: 'color:white',
           //claim variable
           message: null,
-          //calim check filter binding
+          //claim check filter binding
           display: 0,
           //input rules 
           rules: {
@@ -156,10 +169,47 @@
           dialog: false,
           //sign up page tracker
           step: 0,
+          step2: 0,
 
                 }
       },
       methods:{
+        check(){console.log(sessionStorage.getItem('ack'))},
+        //lets the system know an account is being created (session deep)
+        accSubmit(){
+          this.acc_submittrig = true;
+          const ack = JSON.stringify(this.acc_submittrig);
+          sessionStorage.setItem('ack', ack);
+        },
+        //lets the system know to trigger an acknowledgement for creation success
+        accSubmitSucc(){
+          if(sessionStorage.getItem('ack') != null){
+            const ack = JSON.parse(sessionStorage.getItem('ack') || '');
+            if(ack){
+              this.acc_submittrig = ack;
+            }
+          // this function is triggered on creation -> and we check two things to verify a form was submitted
+          //properly the trigger and the path so if the trigger is true and the path is login
+
+        if(this.acc_submittrig == true && window.location.pathname == '/login'){
+          this.acc_subacktrig = true;
+          const myTimeout = setTimeout(this.resetAck, 5000);
+        }
+      };
+        },
+        //reset success acknowledgement
+        resetAck(){
+          this.acc_subacktrig = false;
+          this.acc_submittrig = false;
+          const revert = JSON.stringify(this.acc_submittrig);
+          sessionStorage.setItem('ack', revert);
+        },
+
+        //Send Login acknowledgement
+        ackLogin(){
+          var log = true;
+          sessionStorage.setItem('logquery', JSON.stringify(log));
+        },
       //retrieves form data from previous search stored in session and applies it to input binding
       initFormDataState(){
         if(sessionStorage.getItem('claim') != null){
@@ -167,12 +217,20 @@
         if(claim){
           this.message = claim;
         }
-      }
+      };
+      if(sessionStorage.getItem('mode') != null){
+        const mode = JSON.parse(sessionStorage.getItem('mode') || '');
+        if(mode){
+          this.mode = mode;
+        }
+      };
       },
       //saves from data from proceeding search in session
       saveFormDataState(){
         const claim = JSON.stringify(this.message);
         sessionStorage.setItem('claim', claim);
+        const mode = JSON.stringify(this.mode);
+        sessionStorage.setItem('mode', mode);
       },
       startLoader(){
         this.dialog = true;
@@ -181,13 +239,26 @@
     //triggers retrieval method on template render and monitors loaders
     created(){
       this.initFormDataState();
+      this.accSubmitSucc();
     },
     watch:{
-      isFormValid(value) {
-        this.isFormValid = value;
-    },
-    isFormValidSignUp(value) {
-  },
+      acc_submittrig(val){
+        this.acc_submittrig = val;
+      },
+     mode(val){
+      if(val == 'light'){
+        this.theme_main = 'background-color: white; color: black';
+        this.theme_logo = 'http://drive.google.com/uc?export=view&id=1hvGsHogxr8ksrmwkuHzhwF9700tkM8yY';
+        this.theme_eleveation = 6;
+        this.theme_respStyle = 'color:black';
+      }
+      if(val == 'dark'){
+        this.theme_main = 'background-color: #191A1D; color: white';
+        this.theme_logo = 'http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s';
+        this.theme_eleveation = 0;
+        this.theme_respStyle = 'color:white';
+      }
+     },
     dialog(val) {
       if (val == true) return
       this.dialog = false

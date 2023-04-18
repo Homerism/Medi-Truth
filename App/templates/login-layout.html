@@ -30,6 +30,9 @@
       body {
         font-family: "Lato", sans-serif;
       }
+      .v-navigation-drawer.style {
+        position: fixed;
+      }
     </style>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,7 +46,7 @@
                   <v-app>
              <v-layout>
       <!-- Navigation -->
-                    <v-navigation-drawer color="#191A1D">
+                    <v-navigation-drawer fixed color="#191A1D" style="position:fixed !important">
               <!-- List Rendering  -->
                       <v-list density="compact" nav>
                         <v-list-item
@@ -62,11 +65,24 @@
                             <v-list-item prepend-icon="mdi-plus" href="/feedback" style="color: white">Contribute
                             </v-list-item>
                             {% endif %}
+                            <v-list-item prepend-icon="mdi-door-open" href="/logout" style="color: white"> Logout
+                            </v-list-item>
+                            <v-list-item>
+                              <v-switch
+                              v-on:change="saveFormDataState"
+                              v-model="mode"
+                              hide-details
+                              true-value="light"
+                              false-value="dark"
+                              :label="`${mode}`"
+                              inset
+                            ></v-switch>
+                            </v-list-item>
 
                       </v-list>
                     </v-navigation-drawer>
       <!-- Main Content, Right of Navigation Drawer -->
-                    <v-main style="background-color: #191A1D; color: white">
+                    <v-main :style="theme_main">
                       <div class="container d-flex justify-center flex-coloumn text-center" id="content" style="width:100%;height:100%; max-height:100%; overflow: hidden">{% block content %}{% endblock %}</div>
                     </v-main>
                   </v-layout>
@@ -87,13 +103,8 @@
           navs: [
             { title: "Home", icon: "mdi-home", link: "/query" },
             { title: "Check Symptom", icon: "mdi-needle", link: "/symptoms" },
-            {
-              title: "ChatBot",
-              icon: "mdi-robot",
-              link: "/chatbot",
-            },
+            { title: "ChatBot", icon: "mdi-robot", link: "/chatbot" },
             { title: "My Queries", icon: "mdi-history", link: "/queries" },
-            { title: "Logout", icon: "mdi-door-open", link: "/logout" },
           ],
           // claim check disclaimers logged out users
           disclaimers: [
@@ -126,10 +137,10 @@
               ],
             },
           ],
-
           // Check claim result output carousels; window -> the articles window2 -> related user seearches
           window: 0,
           window2: 0,
+          window3: 0,
           //claim variable
           message: null,
           //calim check filter binding
@@ -147,9 +158,44 @@
           dialog: false,
           //sign up page tracker
           step: 0,
+          //To do with login acknowledgement
+          log: false,
+          logack: false,
+          timeout: 3000,
+          //TO DO WITH lIGHT AND DARK
+          //TO DO WITH LIGHT AND DARK
+          mode: "dark",
+          theme_main: "background-color: #191A1D; color: white",
+          theme_logo:
+            "http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s",
+          theme_eleveation: 0,
+          theme_respStyle: "color:white",
         };
       },
       methods: {
+        check() {
+          console.log(sessionStorage.getItem("log"));
+        },
+        //lets check whether or not someone is logged in
+        recLogin() {
+          if (sessionStorage.getItem("logquery") != null) {
+            const log = JSON.parse(sessionStorage.getItem("logquery") || "");
+            if (log) {
+              this.log = log;
+              if (this.log == true && window.location.pathname == "/query") {
+                this.logack = true;
+                console.log("This is" + this.logack);
+              }
+              const myTimeout = setTimeout(this.resetLoginAck, 5000);
+            }
+          }
+          //const myTimeout = setTimeout(this.resetLoginAck, 6000);
+        },
+        resetLoginAck() {
+          this.log = false;
+          this.logack = false;
+          sessionStorage.setItem("logquery", JSON.stringify(this.log));
+        },
         //retrieves form data from previous search stored in session and applies it to input binding
         initFormDataState() {
           if (sessionStorage.getItem("claim") != null) {
@@ -158,11 +204,19 @@
               this.message = claim;
             }
           }
+          if (sessionStorage.getItem("mode") != null) {
+            const mode = JSON.parse(sessionStorage.getItem("mode") || "");
+            if (mode) {
+              this.mode = mode;
+            }
+          }
         },
         //saves from data from proceeding search in session
         saveFormDataState() {
           const claim = JSON.stringify(this.message);
           sessionStorage.setItem("claim", claim);
+          const mode = JSON.stringify(this.mode);
+          sessionStorage.setItem("mode", mode);
         },
         startLoader() {
           this.dialog = true;
@@ -171,12 +225,25 @@
       //triggers retrieval method on template render and monitors loaders
       created() {
         this.initFormDataState();
+        this.recLogin();
       },
       watch: {
-        isFormValid(value) {
-          this.isFormValid = value;
+        mode(val) {
+          if (val == "light") {
+            this.theme_main = "background-color: white; color: black";
+            this.theme_logo =
+              "http://drive.google.com/uc?export=view&id=1hvGsHogxr8ksrmwkuHzhwF9700tkM8yY";
+            this.theme_eleveation = 6;
+            this.theme_respStyle = "color:black";
+          }
+          if (val == "dark") {
+            this.theme_main = "background-color: #191A1D; color: white";
+            this.theme_logo =
+              "http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s";
+            this.theme_eleveation = 0;
+            this.theme_respStyle = "color:white";
+          }
         },
-        isFormValidSignUp(value) {},
         dialog(val) {
           if (val == true) return;
           this.dialog = false;
