@@ -13,6 +13,8 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
   >
   <form method="post" action="/feedback">
     <v-textarea
+      v-model="article_title"
+      :rules="[rules.required]"
       auto-grow
       rows="4"
       id="statement"
@@ -22,6 +24,8 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
       type="text"
     ></v-textarea>
     <v-textarea
+      v-model="article_descr"
+      :rules="[rules.required]"
       auto-grow
       rows="4"
       id="description"
@@ -32,12 +36,67 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
     ></v-textarea>
     <div class="text-left">
       <p>Rating:</p>
-      <v-chip-group>
+      <v-chip-group v-model="article_rating">
         <v-chip id="rating-true" name="rating" value="1">True</v-chip>
         <v-chip id="rating-false" name="rating" value="0">False</v-chip>
       </v-chip-group>
     </div>
-    <v-btn type="submit" variant="tonal"> Submit </v-btn>
+
+    <!-- Confirmation Page -->
+    <v-row justify="center">
+      <v-dialog
+        v-model="confirm"
+        fullscreen
+        :scrim="false"
+        transition="dialog-bottom-transition"
+      >
+        <template v-slot:activator="{ props }">
+          <v-btn v-if="confirmed == false" variant="tonal" v-bind="props">
+            Review
+          </v-btn>
+        </template>
+        <v-card :style="theme_background">
+          <!--Tool bar to the top of the fullscreen menu -->
+          <v-toolbar dark color="#191A1D">
+            <v-toolbar-title :style="theme_respStyle">Review</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn @click="confirmReview" class="mx-5" color="white">
+                Save
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <!-- end of toolbar -->
+          <v-sheet color="transparent" flat class="pa-10">
+            <p class="text-h4" :style="theme_respStyle">
+              Contribution Confirmation
+            </p>
+            <p class="text-subtitle-3" :style="theme_respStyle">
+              please ensure this is what you want to submit
+            </p>
+            <!--Article-->
+            <div class="mt-5 px-15" style="background: none">
+              <v-card
+                :style="theme_respStyle"
+                variant="text"
+                :title="article_title"
+                class="text-h2"
+              ></v-card>
+              <v-banner
+                :style="theme_respStyle"
+                style="background: none !important"
+                :text="article_descr"
+              ></v-banner>
+            </div>
+            <!-- Show what has been written-->
+          </v-sheet>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
+    <v-btn v-if="confirmed == true" variant="tonal" type="submit">
+      Submit
+    </v-btn>
   </form>
 
   <p>{{ error }}</p>

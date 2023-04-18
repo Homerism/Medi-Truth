@@ -12,7 +12,12 @@ page %}Login{% endblock %} {{ super() }} {% block content %}
 
   {% endif %}
   <v-sheet width="60%" class="mx-auto" color="transparent">
-    <v-form method="POST" action="/login" v-model="isFormValidLogin">
+    <v-form
+      method="POST"
+      action="/login"
+      v-model="isFormValidLogin"
+      @keypress.enter.prevent
+    >
       <v-sheet color="transparent" class="mb-10">
         <v-card class="mx-auto" max-width="700" variant="tonal">
           <v-card-title

@@ -37,7 +37,7 @@
   {% endif %}
   <v-sheet  color="transparent" height="70%" width="100%">
      {% if not results %} {% for query in user.queries %}
-  <v-card width="600" class="mx-auto text-left pb-3 my-5" variant="tonal">
+  <v-card width="600" class="mx-auto text-left pb-3 my-5" variant="tonal" :elevation="theme_eleveation">
     <template v-slot:title> {{ query.query_text }} </template>
 
     <template v-slot:subtitle> {{ query.verdict }} </template>
@@ -59,7 +59,7 @@
   </v-card>
 
   {% endfor %} {% else %} {% for result in results %}  
-  <v-card width="600" class="mx-auto text-left pb-3 my-5" variant="tonal">
+  <v-card width="600" class="mx-auto text-left pb-3 my-5" variant="tonal" :elevation="theme_eleveation">
     <template v-slot:title> {{ result.query_text }} </template>
 
     <template v-slot:subtitle> {{ result.verdict }} </template>
