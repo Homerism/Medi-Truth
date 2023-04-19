@@ -1,3 +1,23 @@
+# MediTruth Web Application 
+## Project Overview
+The widespread spread of health misinformation is a serious problem for both healthcare professionals and the general population. The primary perpetrators are social media sites, which are held accountable for up to 80% of false or misleading posts. This creates enormous public health and well-being problems, as persons may neglect medical treatment or cause harm to themselves. As a result, MediTruth, a cutting-edge machine learning program, is an innovative tool for combating the spread of health-related disinformation. MediTruth instantly debunks erroneous information in real-time by allowing users to submit any health-related claim, and provides them with credible scholar and or news articles in order to back up the response and inform users. Registered users get access to extra features such as a symptom checker that matches symptoms to associated conditions, a stored claims feature, and an AI-powered chat option for which is tailored to answering health related questions.
+
+## Project Objectives
+
+* To detect misinformed health information. 
+
+* To use algorithms to analyze a given text to determine if the text is factual or not. 
+
+* To aid in mitigating the negative effects of health misinformation. 
+
+* To increase health consumer consciousness. 
+
+* To recommend credible articles for user. 
+
+## Deployed Website: - https://meditruth.onrender.com/
+
+
+
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/JDHomere/qualityassurance)
 <a href="https://render.com/deploy?repo=https://github.com/JDHomere/qualityassurance">
   <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render">
