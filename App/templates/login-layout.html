@@ -148,7 +148,7 @@
           //input rules
           rules: {
             required: (value) => !!value || "Required.",
-            counter: (value) => value.length <= 50 || "Max 50 characters",
+            counter: (value) => value.length <= 150 || "Max 150 characters",
           },
           //boolean for whether or not form is valid
           isFormValid: false,
@@ -170,9 +170,23 @@
             "http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s",
           theme_eleveation: 0,
           theme_respStyle: "color:white",
+          theme_background: "background-color: #191A1D",
+          //To do with liking and disliking
+          like: false,
+          dislike: false,
+          //Contribution confirmation Page //triggers
+          confirm: false,
+          confirmed: false,
+          article_title: "",
+          article_descr: "",
+          article_rating: "",
         };
       },
       methods: {
+        confirmReview() {
+          this.confirm = false;
+          this.confirmed = true;
+        },
         check() {
           console.log(sessionStorage.getItem("log"));
         },
@@ -235,6 +249,7 @@
               "http://drive.google.com/uc?export=view&id=1hvGsHogxr8ksrmwkuHzhwF9700tkM8yY";
             this.theme_eleveation = 6;
             this.theme_respStyle = "color:black";
+            this.theme_background = "background-color: white";
           }
           if (val == "dark") {
             this.theme_main = "background-color: #191A1D; color: white";
@@ -242,6 +257,7 @@
               "http://drive.google.com/uc?export=view&id=1MCQSPYNUgbJsPnFDLWt3LvM8TR_tmo2s";
             this.theme_eleveation = 0;
             this.theme_respStyle = "color:white";
+            this.theme_background = "background-color: #191A1D";
           }
         },
         dialog(val) {

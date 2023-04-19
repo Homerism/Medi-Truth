@@ -11,7 +11,7 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
   <label for="chatbot" class="text-subtitle-2"
     >Ask the Open AI Api any chat related questions via our platform</label
   >
-  <form method="POST" action="/chatbot">
+  <v-form method="POST" action="/chatbot" @keypress.enter.prevent>
     <input type="hidden" name="conversation_id" value="{{ conversation_id }}" />
     <input
       type="hidden"
@@ -24,24 +24,24 @@ block page %}HMA{% endblock %} {{ super() }} {% block content %}
       >
       <v-sheet class="d-flex mx-auto" color="transparent" width="70%">
         <v-text-field
+          :rules="[rules.required]"
           name="user_input"
           id="user_input"
           placeholder="Start a Conversation"
           type="input"
           density="compact"
           variant="outlined"
-          class="pr-2"
         ></v-text-field>
-        <v-btn
-          class="btn"
-          icon="mdi-send"
-          color="transparent"
-          type="submit"
-          variant="flat"
-        ></v-btn>
       </v-sheet>
+      <v-btn
+        class="mb-5"
+        icon="mdi-send"
+        color="transparent"
+        type="submit"
+        variant="flat"
+      ></v-btn>
     </div>
-  </form>
+  </v-form>
   <form method="POST" action="/end_conversation">
     <v-btn
       type="submit"

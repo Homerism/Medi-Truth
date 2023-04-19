@@ -9,6 +9,7 @@ page %}Signup{% endblock %} {{ super() }} {% block content %}
 >
   <v-sheet width="60%" class="mx-auto" color="transparent">
     <v-form
+      @keypress.enter.prevent
       v-on:change="saveFormDataState"
       id="myForm"
       method="POST"
