@@ -7,7 +7,8 @@ import nltk
 
 from App.controllers.algorithm import (
    clean_text, 
-   stem
+   stem,
+   algorithm
 )
 
 nltk.download('stopwords')
@@ -15,6 +16,8 @@ nltk.download('stopwords')
 vector = joblib.load('App/controllers/vector.joblib')
 # Import the model
 model = joblib.load('App/controllers/model.joblib')
+
+p_model,p_vector = algorithm()
 
 def health_classification(claim):
   claim = clean_text(claim)

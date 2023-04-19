@@ -43,50 +43,24 @@ def stem(text):
     return claim
 
 def algorithm():
-    # Download nltk stopwords
     nltk.download('stopwords')
-
-    # Load health claims dataset to a pandas DataFrame
     health_claims = pd.read_csv('App/controllers/claims.csv')
-
-    health_claims.shape #not necessary
-
-    # Replace null values with empty string
+    health_claims.shape 
     health_claims = health_claims.fillna('')
-
-    # Remove duplicates from dataset
     health_claims = health_claims.drop_duplicates()
-
-    # Placing the statement column columns into 'contents' column
     health_claims['contents'] = health_claims['statement']
-
-    # Stemm contents to root word
     health_claims['contents'] = health_claims['contents'].apply(stem)
-
-    print(health_claims['contents'])
-
-    # Clean 'contents' column using the clean_text function
     health_claims['contents'] = health_claims['contents'].apply(clean_text)
-
-    # Separate data and label
     X = health_claims.drop(columns='rating', axis=1)
     Y = health_claims['rating']
-
     X = health_claims['contents'].values
     Y = health_claims['rating'].values
-
-    # Convert text data to numerical data using TfidfVectorizer
     vector = TfidfVectorizer(stop_words='english', max_df=0.7)
     vector.fit(X)
     X = vector.transform(X)
-
-    # Split data into training and testing sets
     x_train, x_test, y_train, y_test = train_test_split(X, Y, stratify=Y, test_size=0.2, random_state=2)
-
-    # Trainning of the Passive Aggressive Classifier model
     model = PassiveAggressiveClassifier(max_iter=100)
     model.fit(x_train,y_train)
-
     return model, vector
 
 def data_in_csv_check(statement):
